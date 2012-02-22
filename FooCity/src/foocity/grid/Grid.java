@@ -3,8 +3,19 @@ package foocity.grid;
 import foocity.tile.*;
 
 import java.lang.*;
+
+/**
+ * Representation of the game grid
+ * 
+ * This class provides access to the members of the grid, and provides methods
+ * for safely interacting with the underlying elements.
+ */
 public class Grid {
 	
+	/*
+	 *  The tiles themselves are exposed so that internal helper classes can
+	 *  directly access and update tile elements,
+	 */
 	protected Tile[][] _tiles;
 	private int _xSize;
 	private int _ySize;
