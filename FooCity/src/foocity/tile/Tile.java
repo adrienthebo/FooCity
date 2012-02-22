@@ -1,5 +1,8 @@
 package foocity.tile;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /** Class: Tile
  * 
  * Defines the general properties of tiles and centralizes tile functionality.
@@ -60,6 +63,17 @@ public abstract class Tile {
 		return _produceWater;
 	}
 	
+	/**
+	 * Retrieve the total statistics for this tile. That is, what are the
+	 * statistics of this tile, taking into account the surrounding tiles.
+	 * 
+	 * @return
+	 */
+	public Map<String, Integer> getAggregateStats() {
+		// TODO
+		Map<String, Integer> stats = new HashMap<String, Integer>();
+		return stats;
+	}
 	/**
 	 * <p>Attempts to load a tile class based on the passed in tile name</p>
 	 * 
