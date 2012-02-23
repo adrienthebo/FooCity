@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import foocity.tile.*;
 
-public class SubTileTest {
+public class TestTileGetSubTile {
 
 	@Test
 	public void getValidTile() {
@@ -19,5 +19,4 @@ public class SubTileTest {
 		Class<Tile> noSuchTile = Tile.getSubTile("ThisIsNotATile");
 		assertNull(noSuchTile);
 	}
-
 }
