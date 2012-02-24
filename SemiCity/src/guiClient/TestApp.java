@@ -18,6 +18,8 @@ import javax.swing.JSeparator;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 
 
 public class TestApp
@@ -83,15 +85,31 @@ public class TestApp
 		mnNewMenu.add(separator);
 		
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Exit");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_3);
 		
 		JMenu mnNewMenu_1 = new JMenu("Change");
 		menuBar.add(mnNewMenu_1);
 		
-		JCheckBoxMenuItem chckbxmntmNewCheckItem = new JCheckBoxMenuItem("Continuous Time");
-		mnNewMenu_1.add(chckbxmntmNewCheckItem);
+		final JCheckBoxMenuItem chckbxmntmNewCheckItem = new JCheckBoxMenuItem("Continuous Time");
+		final JMenuItem mntmNewMenuItem_5 = new JMenuItem("Step Time Forward");
 		
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Step Time Forward");
+		chckbxmntmNewCheckItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chckbxmntmNewCheckItem.getState() == true) {
+					mntmNewMenuItem_5.setEnabled(false);
+				}
+				else {
+					mntmNewMenuItem_5.setEnabled(true);
+				}
+			}
+		});
+
+		mnNewMenu_1.add(chckbxmntmNewCheckItem);
 		mnNewMenu_1.add(mntmNewMenuItem_5);
 		
 		JSeparator separator_1 = new JSeparator();
@@ -127,6 +145,15 @@ public class TestApp
 		JPanel panel = new JPanel();
 		scrollPane.setViewportView(panel);
 		panel.setLayout(new GridLayout(128, 128, 0, 0));
+		
+		JButton[][] buttonArray = new JButton[128][128];
+		
+		for (int i = 0; i < 128; i++) {
+			for (int j = 0; j < 128; j++) {
+				buttonArray[i][j] = new JButton("HI");
+				panel.add(buttonArray[i][j]);
+			}
+		}
 	}
 
 }
