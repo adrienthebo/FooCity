@@ -18,6 +18,9 @@ import javax.swing.JSeparator;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 public class TestApp
@@ -83,6 +86,11 @@ public class TestApp
 		mnNewMenu.add(separator);
 		
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Exit");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_3);
 		
 		JMenu mnNewMenu_1 = new JMenu("Change");
