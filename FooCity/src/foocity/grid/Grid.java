@@ -2,8 +2,6 @@ package foocity.grid;
 
 import foocity.tile.*;
 
-import java.lang.*;
-
 /**
  * Representation of the game grid
  * 
@@ -97,7 +95,6 @@ public class Grid {
 	 * @return whether the tile was updated successfully.
 	 * @wtf I'm not going to be caught dead writing case statements for class names
 	 */
-	@SuppressWarnings("unchecked") // XXX this is lazy
 	public boolean setTile(int xAxis, int yAxis, String tileClass) {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
