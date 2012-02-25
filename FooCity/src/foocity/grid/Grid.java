@@ -38,6 +38,31 @@ public class Grid {
 		_tiles = new Tile[xSize][ySize];
 	}
 	
+	/**
+	 * <p>
+	 * Generates a game grid from a 2D array of tile names.
+	 * </p>
+	 * 
+	 * <p>
+	 * XXX This currently does not check if the 2D array is irregular. It
+	 * assumes that the length of the first nested array is the length of the
+	 * subsequent arrays.
+	 * </p>
+	 * 
+	 * @param newTiles a 2D array of tile names
+	 */
+	public Grid(String[][] newTiles) {
+		// Generate new empty grid
+		this(newTiles.length, newTiles[0].length);
+		
+		// Populate the grid by instantiating a tile at each location
+		for(int yIter = 0; yIter < _ySize; yIter++) {
+			for(int xIter = 0; xIter < _xSize; xIter++) {
+				setTile(xIter, yIter, newTiles[xIter][yIter]);
+			}
+		}
+	}
+	
 	public int getXSize() { 
 		return _xSize;
 	}
