@@ -1,5 +1,9 @@
 package foocity.grid;
 
+import javax.swing.event.EventListenerList;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
 import foocity.tile.*;
@@ -19,6 +23,8 @@ public class Grid {
 	protected Tile[][] _tiles;
 	private int _xSize;
 	private int _ySize;
+	
+	private EventListenerList _listeners = new EventListenerList();
 	
 	/**
 	 * Generates a game grid of the specified size.
@@ -146,5 +152,32 @@ public class Grid {
 	 */
 	public Iterator<String> getIterator() {
 		return new GridIterator(this);
+	}
+	
+	public void addGridListener(GridListener listener) {
+		_listeners.add(GridListener.class, listener);
+	}
+	
+	public void removeGridListener(GridListener listener) {
+		_listeners.remove(GridListener.class, listener);
+	}
+	
+	/**
+	 * <p>
+	 * XXX This class only expects GridListeners to attach to this, and so will
+	 * fail with nasty type casting errors if this somehow isn't the case.
+	 * </p>
+	 * @param xAxis the X axis of the event
+	 * @param yAxis the Y axis of the event
+	 * @param oldTile
+	 * @param newTile
+	 */
+	protected void fireGridUpdated(int xAxis, int yAxis, Tile oldTile, Tile newTile) {
+		GridListener[] listeners = (GridListener[])_listeners.getListenerList();
+		
+		GridEvent event = new GridEvent(this, xAxis, yAxis, oldTile, newTile);
+		for(GridListener listener : listeners ){
+			listener.gridUpdated(event);
+		}
 	}
 }
