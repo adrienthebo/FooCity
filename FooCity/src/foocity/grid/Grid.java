@@ -2,8 +2,6 @@ package foocity.grid;
 
 import javax.swing.event.EventListenerList;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
 import foocity.tile.*;
