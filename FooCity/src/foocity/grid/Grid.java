@@ -117,8 +117,8 @@ public class Grid {
 				 * XXX Should we just be aborting here since this error should
 				 * only be encountered on developer error?
 				 */
-				System.err.println("Unable to instantiate requested tile \"" + tileClass + "\" at index " + xAxis + ", " + yAxis);
-				System.err.println(Thread.currentThread().getStackTrace());
+				System.err.println("WARNING: Unable to instantiate requested tile \"" + tileClass + "\" at index " + xAxis + ", " + yAxis);
+				System.err.println(Thread.currentThread().getStackTrace().toString());
 				return false;
 			}
 		} catch (Exception e) {
