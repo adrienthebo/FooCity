@@ -1,4 +1,4 @@
-package test.grid.fixtures;
+package test.fixtures;
 
 public class GridFixtures {
 	static public String[][] tiles = {

@@ -1,4 +1,4 @@
-package test.tile.fixtures;
+package test.fixtures;
 
 import foocity.tile.Tile;
 

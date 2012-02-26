@@ -3,8 +3,6 @@ package test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import test.tile.*;
-import test.grid.*;
 /**
  * <p>
  * This class is a placeholder for the the JUnit test suite annotations.

@@ -1,4 +1,4 @@
-package test.tile;
+package test;
 
 import static org.junit.Assert.*;
 

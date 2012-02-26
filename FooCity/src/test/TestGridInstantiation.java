@@ -1,6 +1,6 @@
-package test.grid;
+package test;
 
-import test.grid.fixtures.*;
+import test.fixtures.GridFixtures;
 
 import static org.junit.Assert.*;
 

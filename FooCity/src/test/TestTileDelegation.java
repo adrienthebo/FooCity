@@ -1,6 +1,6 @@
-package test.tile;
+package test;
 
-import test.tile.fixtures.TestTile;
+import test.fixtures.TestTile;
 
 import static org.junit.Assert.*;
 
