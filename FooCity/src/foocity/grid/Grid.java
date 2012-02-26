@@ -25,9 +25,9 @@ public class Grid {
 	 * 
 	 * <pre><b>Example:</b></pre>
 	 * 
-	 * <code>
+	 * <pre>
 	 * Grid gameGrid = new Grid(10, 10);
-	 * </code>
+	 * </pre>
 	 * 
 	 * @param xSize the size of the grid X axis
 	 * @param ySize the size of the grid Y axis
@@ -43,6 +43,16 @@ public class Grid {
 	 * Generates a game grid from a 2D array of tile names.
 	 * </p>
 	 * 
+	 * <pre>
+	 * String[][] tiles = {
+	 *   {"Tile00", "Tile01"},
+	 *   {"Tile10", "Tile11"},
+	 *   {"Tile20", "Tile21"},
+	 * };
+	 * 
+	 * Grid newGrid = new Grid(tiles);
+	 * </pre>
+	 *   
 	 * <p>
 	 * XXX This currently does not check if the 2D array is irregular. It
 	 * assumes that the length of the first nested array is the length of the

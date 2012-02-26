@@ -9,6 +9,8 @@ import foocity.tile.*;
  * 
  * This class is in the default permission namespace as it permits direct
  * access to grid members, and this needs to be hidden to avoid breaking encapsulating.
+ * 
+ * Iteration is done top to bottom, then left to right.
  */
 class GridMemberIterator implements Iterator<Tile> {
 	
@@ -23,6 +25,7 @@ class GridMemberIterator implements Iterator<Tile> {
 	/**
 	 * @returns The next tile in the grid if it exists
 	 */
+	@Override
 	public Tile next() {
 		Tile nextTile = null;
 		if(hasNextY()) {
@@ -63,6 +66,7 @@ class GridMemberIterator implements Iterator<Tile> {
 	 * 
 	 * @throws UnsupportedOperationException();
 	 */
+	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}
@@ -70,6 +74,7 @@ class GridMemberIterator implements Iterator<Tile> {
 	/**
 	 * @thisisselfexplanatory
 	 */
+	@Override
 	public boolean hasNext() {
 		return hasNextX() || hasNextY();
 	}
