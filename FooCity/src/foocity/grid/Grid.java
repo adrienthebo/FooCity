@@ -116,14 +116,20 @@ public class Grid {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
 
+		Tile oldTile = _tiles[_xAxis][_yAxis];
+		
 		try {
 			// Attempt to retrieve the class of the tile we're generating.
 			Class<Tile> newTileClass = Tile.getSubTile(tileClass);
-			
+						
 			if(newTileClass != null) {
 				// Do some sweet sweet metaprogramming magic.
 				Tile newTile = newTileClass.newInstance();
 				_tiles[xAxis][yAxis] = newTile;
+				
+				//Fire event to notify listeners
+				fireGridUpdated(xAxis, yAxis, oldTile, newTile);
+				
 				return true;
 			}
 			else {
