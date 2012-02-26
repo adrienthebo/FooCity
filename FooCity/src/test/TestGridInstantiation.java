@@ -27,7 +27,16 @@ public class TestGridInstantiation {
 		
 		_subject = new Grid(tiles);
 		
+		// Assert that the size is right
 		assertEquals(_subject.getXSize(), 3);
 		assertEquals(_subject.getYSize(), 2);
+		
+		// Assert that the locations are right
+		assertEquals("GrassTile", _subject.getTile(0,0).toString());
+		assertEquals("DirtTile", _subject.getTile(0,1).toString());
+		assertEquals("CommercialTile", _subject.getTile(1,0).toString());
+		assertEquals("IndustrialTile", _subject.getTile(1,1).toString());
+		assertEquals("WaterTile", _subject.getTile(2,0).toString());
+		assertEquals("ForestTile", _subject.getTile(2,1).toString());
 	}
 }
