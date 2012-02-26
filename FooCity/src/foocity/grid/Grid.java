@@ -84,8 +84,8 @@ public class Grid {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
 		
-		Class<Tile> tileClass = (Class<Tile>) _tiles[xAxis][yAxis].getClass();
-		return tileClass.getName().intern();
+		Tile thisTile = _tiles[xAxis][yAxis];
+		return thisTile.unqualifiedClassName();
 	}
 	
 	/**
