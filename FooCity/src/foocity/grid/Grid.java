@@ -79,7 +79,6 @@ public class Grid {
 	 * 
 	 * @return the class type of the tile at the given axis
 	 */
-	@SuppressWarnings("unchecked") // XXX this is lazy
 	public String getTile(int xAxis, int yAxis) {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
