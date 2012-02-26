@@ -25,22 +25,26 @@ class GridIterator implements Iterator<Tile> {
 	 */
 	public Tile next() {
 		Tile nextTile = null;
-		if(hasNextX()) {
+		if(hasNextY()) {
 			/*
-			 *  We are still scanning across one row on the X axis. Return the
-			 *  current tile and increment the iterator count.
+			 *  We are still scanning across one column on the y axis. Return 
+			 *  the current tile and increment the iterator count.
 			 */
 			nextTile = getCurrentTile();
-			_xAxisIter++;
-		}
-		else if(hasNextY()) {
-			/*
-			 * We've reached the end of a row, drop down to the next row and
-			 * reset the X axis iterator.
-			 */
-			_xAxisIter = 0;
 			_yAxisIter++;
+		}
+		else if(hasNextX()) {
+			/*
+			 * We've reached the end of a row, drop down to the next row,
+			 * retrieve the first element for returning, and point to the next
+			 * location for the next iteration
+			 */
+			_yAxisIter = 0;
+			_xAxisIter++;
+			
+			// XX This could be merged with the previous case.
 			nextTile = getCurrentTile();
+			_yAxisIter++;
 		}
 		else {
 			/* Per the Iterable interface spec 
@@ -75,7 +79,7 @@ class GridIterator implements Iterator<Tile> {
 	}
 	
 	private boolean hasNextY() {
-		return _yAxisIter < (_grid.getYSize() - 1);
+		return _yAxisIter < (_grid.getYSize());
 	}
 	
 	private Tile getCurrentTile() {
