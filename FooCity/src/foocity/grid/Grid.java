@@ -1,5 +1,7 @@
 package foocity.grid;
 
+import java.util.Iterator;
+
 import foocity.tile.*;
 
 /**
@@ -128,5 +130,21 @@ public class Grid {
 			 */
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * <p>
+	 * Produces a grid iterator for this grid.
+	 * </p>
+	 * 
+	 * <p>
+	 * XXX This breaks encapsulation, but I want to write tests for this.
+	 * You probably don't need/want to use this.
+	 * </p>
+	 * 
+	 * @return An iterator for the current grid.
+	 */
+	public Iterator<Tile> getIterator() {
+		return new GridIterator(this);
 	}
 }

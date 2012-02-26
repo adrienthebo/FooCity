@@ -17,5 +17,6 @@ import org.junit.runners.Suite;
         TestTileDelegation.class,
         TestTileGetSubTile.class,
         TestGridInstantiation.class,
+        TestGridIterator.class,
 })
 public class TestDriver {}
