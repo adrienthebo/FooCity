@@ -10,12 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import foocity.grid.Grid;
-import foocity.tile.Tile;
 
 public class TestGridIterator {
 	
 	private Grid _grid;
-	private Iterator<Tile> _subject;
+	private Iterator<String> _subject;
 	
 	@Before
 	public void instantiate() {
@@ -25,12 +24,12 @@ public class TestGridIterator {
 	
 	@Test
 	public void testIteration() {
-		assertEquals("GrassTile", _subject.next().unqualifiedClassName());
-		assertEquals("DirtTile", _subject.next().unqualifiedClassName());
-		assertEquals("CommercialTile", _subject.next().unqualifiedClassName());
-		assertEquals("IndustrialTile", _subject.next().unqualifiedClassName());
-		assertEquals("WaterTile", _subject.next().unqualifiedClassName());
-		assertEquals("ForestTile", _subject.next().unqualifiedClassName());
+		assertEquals("GrassTile", _subject.next());
+		assertEquals("DirtTile", _subject.next());
+		assertEquals("CommercialTile", _subject.next());
+		assertEquals("IndustrialTile", _subject.next());
+		assertEquals("WaterTile", _subject.next());
+		assertEquals("ForestTile", _subject.next());
 		assertFalse(_subject.hasNext());
 	}
 	
