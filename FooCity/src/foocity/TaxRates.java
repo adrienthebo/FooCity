@@ -5,6 +5,10 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.event.EventListenerList;
 
+/**
+ * Represents the current state of taxes. Requires that all tax rates must be
+ * between 0 and 100, inclusive.
+ */
 public class TaxRates {
 	
 	protected int _propertyTax;
@@ -14,8 +18,48 @@ public class TaxRates {
 	
 	private EventListenerList _listeners = new EventListenerList();
 	
+	/**
+	 * <p>
+	 * Generates a default set of tax rates of 5%.
+	 * </p>
+	 * 
+	 * <pre>
+	 * taxes = new TaxRates();
+	 * </pre>
+	 */
 	public TaxRates() {
-		
+		_propertyTax = 5;
+		_salesTax = 5;
+		_businessTax = 5;
+		_incomeTax = 5;
+	}
+	
+	/**
+	 * <p>
+	 * Generates a TaxRates object with the specified inputs. All rates must be
+	 * between 0 and 100.
+	 * </p>
+	 * 
+	 * <pre>
+	 * rates = new TaxRates(10, 5, 10, 20);
+	 * 
+	 * try {
+	 *     invalidTaxRates = new TaxRates(-1, 2000, 2 ** 20000, 1e-1000);
+	 * catch(IllegalArgumentException(e)) {
+	 *     System.out.println("Invalid tax rate!");
+	 * }
+	 * </pre>
+	 * 
+	 * @param propertyTax
+	 * @param salesTax
+	 * @param businessTax
+	 * @param incomeTax
+	 */
+	public TaxRates(int propertyTax, int salesTax, int businessTax, int incomeTax) {
+		setPropertyTax(propertyTax);
+		setSalesTax(salesTax);
+		setBusinessTax(businessTax);
+		setIncomeTax(incomeTax);
 	}
 
 	public int getPropertyTax() {
