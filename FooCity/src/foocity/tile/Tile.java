@@ -63,6 +63,10 @@ public abstract class Tile {
 		return _produceWater;
 	}
 	
+	public String toString() {
+		return getClass().getName();
+	}
+	
 	/**
 	 * Retrieve the total statistics for this tile. That is, what are the
 	 * statistics of this tile, taking into account the surrounding tiles.
