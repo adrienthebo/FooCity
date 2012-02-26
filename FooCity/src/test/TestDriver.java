@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import test.tile.*;
+import test.grid.*;
 /**
  * <p>
  * This class is a placeholder for the the JUnit test suite annotations.
@@ -16,6 +17,7 @@ import test.tile.*;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         TestTileDelegation.class,
-        TestTileGetSubTile.class
+        TestTileGetSubTile.class,
+        TestGridInstantiation.class,
 })
-public class CapriciousClassName {}
+public class TestDriver {}
