@@ -116,7 +116,7 @@ public class Grid {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
 
-		Tile oldTile = _tiles[_xAxis][_yAxis];
+		Tile oldTile = _tiles[xAxis][yAxis];
 		
 		try {
 			// Attempt to retrieve the class of the tile we're generating.
