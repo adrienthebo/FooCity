@@ -91,4 +91,13 @@ class GridMemberIterator implements Iterator<Tile> {
 		return _grid._tiles[_xAxisIter][_yAxisIter];
 	}
 	
+	// XXX This was written in a fit of late night hacking. This may be evil.
+	protected int currentXAxis() {
+		return _xAxisIter;
+	}
+	
+	// XXX This was written in a fit of late night hacking. This may be evil.
+	protected int currentYAxis() {
+		return _yAxisIter;
+	}
 }
