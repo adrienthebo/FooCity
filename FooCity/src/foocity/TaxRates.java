@@ -5,11 +5,13 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.event.EventListenerList;
 
+import foocity.event.PropertyChangeGenerator;
+
 /**
  * Represents the current state of taxes. Requires that all tax rates must be
  * between 0 and 100, inclusive.
  */
-public class TaxRates {
+public class TaxRates implements PropertyChangeGenerator {
 	
 	protected int _propertyTax;
 	protected int _salesTax;

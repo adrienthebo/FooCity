@@ -5,11 +5,13 @@ import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 
 import javax.swing.event.EventListenerList;
+
+import foocity.event.PropertyChangeGenerator;
 /**
  * This class forms a thin wrapper around the java.util.Calendar, with a
  * simpler interface and support for Event Listeners.
  */
-public class GameCalendar {
+public class GameCalendar implements PropertyChangeGenerator {
 	
 	private EventListenerList _listeners = new EventListenerList();
 	private Calendar _calendar;
