@@ -19,6 +19,13 @@ public class GameState {
 	 * simpler. On the other hand, it's just a ****ing integer.
 	 */
 	
+	public GameState(Grid newGrid, TaxRates newTaxRates, GameCalendar newGameCalendar, int newFunds) {
+		_grid = newGrid;
+		_taxes = newTaxRates;
+		_calendar = newGameCalendar;
+		_funds = newFunds;
+	}
+	
 	public Grid getGrid() {
 		return _grid;
 	}
