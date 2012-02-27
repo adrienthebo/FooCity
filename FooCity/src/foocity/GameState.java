@@ -2,6 +2,10 @@ package foocity;
 
 import foocity.grid.Grid;
 
+/**
+ * The GameState class is an aggregation of the different state components of a
+ * specific game.
+ */
 public class GameState {
 	protected Grid _grid;
 	protected TaxRates _taxes;
