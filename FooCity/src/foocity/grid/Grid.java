@@ -195,10 +195,11 @@ public class Grid {
 	 * @param newTile
 	 */
 	protected void fireGridUpdated(int xAxis, int yAxis, Tile oldTile, Tile newTile) {
-		GridListener[] listeners = (GridListener[])_listeners.getListenerList();
+		Object[] listeners = _listeners.getListenerList();
 		
 		GridEvent event = new GridEvent(this, xAxis, yAxis, oldTile, newTile);
-		for(GridListener listener : listeners ){
+		for(Object l : listeners ){
+			GridListener listener = (GridListener)l;
 			listener.gridUpdated(event);
 		}
 	}
