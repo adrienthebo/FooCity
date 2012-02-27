@@ -84,7 +84,7 @@ public class TaxRates {
 			_propertyTax = tax;
 		}
 		else
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Property tax " + tax + " out of range (0,100) inclusive");
 	}
 	
 	public void setSalesTax(int tax) {
@@ -93,7 +93,7 @@ public class TaxRates {
 			_salesTax = tax;
 		}
 		else
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Sales tax " + tax + " out of range (0,100) inclusive");
 	}
 	
 	public void setBusinessTax(int tax) {
@@ -102,7 +102,7 @@ public class TaxRates {
 			_businessTax = tax;
 		}
 		else
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Business tax " + tax + " out of range (0,100) inclusive");
 	}
 	
 	public void setIncomeTax(int tax) {
@@ -111,7 +111,7 @@ public class TaxRates {
 			_incomeTax = tax;
 		}
 		else
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Income tax " + tax + " out of range (0,100) inclusive");
 	}
 	
 	private boolean validateRate(int tax) {
