@@ -155,7 +155,13 @@ public class Grid {
 				 * only be encountered on developer error?
 				 */
 				System.err.println("WARNING: Unable to instantiate requested tile \"" + tileClass + "\" at index " + xAxis + ", " + yAxis);
-				System.err.println(Thread.currentThread().getStackTrace().toString());
+				
+				/*
+				 * XXX This is a very janky solution, but the alternative of
+				 * printing our own stack trace really is not worth the effort.
+				 */
+				new Throwable().printStackTrace();
+				
 				return false;
 			}
 		} catch (Exception e) {
