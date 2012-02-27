@@ -1,11 +1,9 @@
 package foocity;
 
-import java.beans.PropertyChangeEvent;
+import foocity.event.*;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.event.EventListenerList;
-
-import foocity.event.PropertyChangeGenerator;
 
 /**
  * Represents the current state of taxes. Requires that all tax rates must be
@@ -82,7 +80,7 @@ public class TaxRates implements PropertyChangeGenerator {
 	
 	public void setPropertyTax(int tax) {
 		if(validateRate(tax)) {
-			fireEvent("PropertyTax", _propertyTax, tax);
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "PropertyTax", _propertyTax, tax);
 			_propertyTax = tax;
 		}
 		else
@@ -91,7 +89,7 @@ public class TaxRates implements PropertyChangeGenerator {
 	
 	public void setSalesTax(int tax) {
 		if(validateRate(tax)) {
-			fireEvent("SalesTax", _salesTax, tax);
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "SalesTax", _salesTax, tax);
 			_salesTax = tax;
 		}
 		else
@@ -100,7 +98,7 @@ public class TaxRates implements PropertyChangeGenerator {
 	
 	public void setBusinessTax(int tax) {
 		if(validateRate(tax)) {
-			fireEvent("BusinessTax", _businessTax, tax);
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "BusinessTax", _businessTax, tax);
 			_businessTax = tax;
 		}
 		else
@@ -109,7 +107,7 @@ public class TaxRates implements PropertyChangeGenerator {
 	
 	public void setIncomeTax(int tax) {
 		if(validateRate(tax)) {
-			fireEvent("IncomeTax", _incomeTax, tax);
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "IncomeTax", _incomeTax, tax);
 			_incomeTax = tax;
 		}
 		else
@@ -120,21 +118,13 @@ public class TaxRates implements PropertyChangeGenerator {
 		return (tax > 0 && tax < 100);
 	}
 	
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		_listeners.add(PropertyChangeListener.class, listener);
 	}
 	
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		_listeners.remove(PropertyChangeListener.class, listener);
-	}
-	
-	protected void fireEvent(String property, int oldRate, int newRate) {
-		PropertyChangeListener[] listeners = (PropertyChangeListener[])_listeners.getListenerList();
-		
-		PropertyChangeEvent event = new PropertyChangeEvent(this, property, oldRate, newRate);
-		
-		for(PropertyChangeListener listener : listeners) {
-			listener.propertyChange(event);
-		}
 	}
 }

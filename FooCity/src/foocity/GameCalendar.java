@@ -1,12 +1,11 @@
 package foocity;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 
 import javax.swing.event.EventListenerList;
 
-import foocity.event.PropertyChangeGenerator;
+import foocity.event.*;
 /**
  * This class forms a thin wrapper around the java.util.Calendar, with a
  * simpler interface and support for Event Listeners.
@@ -24,8 +23,10 @@ public class GameCalendar implements PropertyChangeGenerator {
 	 * Adds a month to the current date.
 	 */
 	public void increment() {
-		//TODO notify listeners
+		Object oldCalendar = _calendar.clone();
 		_calendar.add(Calendar.MONTH, 1);
+		Object newCalendar = _calendar.clone();
+		EventGenerator.firePropertyChangeEvent(this, _listeners, "Calendar", oldCalendar, newCalendar);
 	}
 	
 	@Override
@@ -33,21 +34,13 @@ public class GameCalendar implements PropertyChangeGenerator {
 		return _calendar.toString();
 	}
 	
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		_listeners.add(PropertyChangeListener.class, listener);
 	}
 	
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		_listeners.remove(PropertyChangeListener.class, listener);
-	}
-
-	protected void fireEvent(String property, Calendar oldDate, Calendar newDate) {
-		PropertyChangeListener[] listeners = (PropertyChangeListener[])_listeners.getListenerList();
-		
-		PropertyChangeEvent event = new PropertyChangeEvent(this, property, oldDate, newDate);
-		
-		for(PropertyChangeListener listener : listeners) {
-			listener.propertyChange(event);
-		}
 	}
 }
