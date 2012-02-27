@@ -7,10 +7,20 @@ import java.util.Iterator;
 import foocity.tile.*;
 
 /**
+ * <p>
  * Representation of the game grid
+ * </p>
  * 
+ * <p>
  * This class provides access to the members of the grid, and provides methods
  * for safely interacting with the underlying elements.
+ * </p>
+ * 
+ * <p>
+ * This class can generate events, but it has a custom event type, the
+ * GridEvent, that indicates the coordinates of an update as well as the update
+ * made. See the GridEvent class for more information.
+ * </p>
  */
 public class Grid {
 	
@@ -85,8 +95,10 @@ public class Grid {
 		return _ySize;
 	}
 	/**
-	 * Provides the intern'd class name. This is done to encapsulate the
-	 * underlying grid members.
+	 * <p>
+	 * Provides the class name as a string of the tile at the given location.
+	 * This is done to encapsulate the underlying grid members.
+	 * </p>
 	 * 
 	 * @param xAxis the zero indexed X coordinate
 	 * @param yAxis the zero indexed Y coordinate
@@ -102,7 +114,13 @@ public class Grid {
 	}
 	
 	/**
+	 * <p>
 	 * Sets the tile type at the specified location
+	 * </p>
+	 * 
+	 * <p>
+	 * This method will generate a GridEvent upon success.
+	 * </p>
 	 * 
 	 * @param xAxis the X coordinate
 	 * @param yAxis the Y coordinate
