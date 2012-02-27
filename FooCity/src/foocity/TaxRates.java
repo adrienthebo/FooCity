@@ -84,7 +84,7 @@ public class TaxRates implements PropertyChangeGenerator {
 			_propertyTax = tax;
 		}
 		else
-			throw new IllegalArgumentException("Property tax " + tax + " out of range (0,100) inclusive");
+			throw mkException("PropertyTax", tax);
 	}
 	
 	public void setSalesTax(int tax) {
@@ -93,7 +93,7 @@ public class TaxRates implements PropertyChangeGenerator {
 			_salesTax = tax;
 		}
 		else
-			throw new IllegalArgumentException("Sales tax " + tax + " out of range (0,100) inclusive");
+			throw mkException("SalesTax", tax);
 	}
 	
 	public void setBusinessTax(int tax) {
@@ -102,7 +102,7 @@ public class TaxRates implements PropertyChangeGenerator {
 			_businessTax = tax;
 		}
 		else
-			throw new IllegalArgumentException("Business tax " + tax + " out of range (0,100) inclusive");
+			throw mkException("BusinessTax", tax);
 	}
 	
 	public void setIncomeTax(int tax) {
@@ -111,7 +111,7 @@ public class TaxRates implements PropertyChangeGenerator {
 			_incomeTax = tax;
 		}
 		else
-			throw new IllegalArgumentException("Income tax " + tax + " out of range (0,100) inclusive");
+			throw mkException("IncomeTax", tax);
 	}
 	
 	private boolean validateRate(int tax) {
@@ -126,5 +126,16 @@ public class TaxRates implements PropertyChangeGenerator {
 	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		_listeners.remove(PropertyChangeListener.class, listener);
+	}
+	
+	/**
+	 * Simplify generation of argument exceptions.
+	 * 
+	 * @param name the name of the invalid tax rate
+	 * @param rate The invalid rate
+	 * @return
+	 */
+	private IllegalArgumentException mkException(String name, int rate) {
+		return new IllegalArgumentException(name + " tax " + rate + " out of range (0,100) inclusive");
 	}
 }
