@@ -23,7 +23,7 @@ public class TestGridInstantiation {
 	@Test
 	public void testArrayConstructor() {
 		
-		String[][] tiles = GridFixtures.tiles;
+		String[][] tiles = GridFixtures.tinyGrid;
 		
 		_subject = new Grid(tiles);
 		

@@ -18,7 +18,7 @@ public class TestGridIterator {
 	
 	@Before
 	public void instantiate() {
-		_grid = new Grid(GridFixtures.tiles);
+		_grid = new Grid(GridFixtures.tinyGrid);
 		_subject = _grid.getIterator();
 	}
 	
