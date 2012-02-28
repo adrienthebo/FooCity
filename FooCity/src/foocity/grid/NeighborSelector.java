@@ -33,12 +33,15 @@ public class NeighborSelector {
 				Point currentPoint = new Point(xIter, yIter);
 				
 				double distance = currentPoint.distance(targetPoint);
-				if(distance <= radius && distance < 1) {
+				if(distance <= radius && distance >= 1) {
 					members.add(grid._tiles[xIter][yIter]);
 				}
 			}
 		}
 		
-		return (Tile[]) members.toArray();
+		Tile[] returnArray = new Tile[members.size()];
+		members.toArray(returnArray);
+		
+		return returnArray;
 	}
 }
