@@ -18,37 +18,24 @@ public class NeighborSelector {
 	 */
 	public static Tile[] get(Grid grid, int xAxis, int yAxis, int radius) {
 		/*
-		 * XXX This is probably going to be a piss poor algorithm, but it's the
-		 * first thing that popped into my mind at 23:00 today.
-		 * 
-		 * Less horrible algorithm, but still horrible:
-		 * Scan all tiles within 2 * radius, X, and Y, if the distance < r
+		 * Scan all tiles within 2 * radius, X, and Y, if the distance <= r
 		 * then add it.
 		 * 
-		 * The "I want to use my iterator class, efficiency be damned" approach
-		 * is as follows:
-		 * 
-		 * Scan the entire grid and add anything within a distance of radius.
-		 * It's a POC, and it's not a critical component. Leave me alone.
-		 * 
-		 * I talk to myself when I'm coding. Myep.
+		 * It's inefficient but easy.
 		 */
 		
 		Point targetPoint = new Point(xAxis, yAxis);
 		
 		ArrayList<Tile> members = new ArrayList<Tile>();
 		
-		GridMemberIterator iter = new GridMemberIterator(grid);
-		
-		while(iter.hasNext()) {
-			Tile current = iter.next();
-			
-			Point currentPoint = new Point(iter.currentXAxis(), iter.currentYAxis()); 
-			
-			double distance = targetPoint.distance(currentPoint);
-			
-			if(distance < radius) {
-				members.add(current);
+		for(int xIter = (xAxis - radius); xIter <= (xAxis + radius); xIter++) {
+			for(int yIter = (yAxis - radius); yIter <= (yAxis + radius); yIter++) {
+				Point currentPoint = new Point(xIter, yIter);
+				
+				double distance = currentPoint.distance(targetPoint);
+				if(distance <= radius) {
+					members.add(grid._tiles[xIter][yIter]);
+				}
 			}
 		}
 		
