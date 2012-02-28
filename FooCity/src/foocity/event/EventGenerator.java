@@ -26,11 +26,13 @@ public class EventGenerator {
 			T newObject
 		) {
 		// HOLY CRAP YOU CAN HAVE PARAMETERIZED METHODS! NEATO!
-		PropertyChangeListener[] listeners = (PropertyChangeListener[])listenerList.getListenerList();
+		
+		Object[] listeners = listenerList.getListenerList();
 		
 		PropertyChangeEvent event = new PropertyChangeEvent(trigger, property, oldObject, newObject);
 		
-		for(PropertyChangeListener listener : listeners) {
+		for(Object l : listeners) {
+			PropertyChangeListener listener = (PropertyChangeListener)l;
 			listener.propertyChange(event);
 		}
 	}
