@@ -55,6 +55,25 @@ public class TestNeighborSelector {
 			assertEquals(expected[i], tileNames[i]);
 	}
 	
+	@Test
+	public void testRadiusMapEdge() {
+		Tile[] neighbors = NeighborSelector.get(_grid, 0, 0, 2);
+		String[] tileNames = mapTilesToNames(neighbors);
+		
+		String[] expected = {
+				"DirtTile",
+				"BeachTile",
+				"GrassTile",
+				"GrassTile",
+				"ForestTile",
+		};
+		
+		for(int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], tileNames[i]);
+		}
+		
+	}
+	
 	/*
 	 *  Java doesn't have anything like a map function AFAIK, so we use 
 	 *  and for loops. Map tiles to their names for easier comparison.

@@ -34,7 +34,12 @@ public class NeighborSelector {
 				
 				double distance = currentPoint.distance(targetPoint);
 				if(distance <= radius && distance >= 1) {
-					members.add(grid._tiles[xIter][yIter]);
+					try {
+						members.add(grid._tiles[xIter][yIter]);
+					}
+					catch(ArrayIndexOutOfBoundsException e) {
+						// Discard any tiles that are out of bounds.
+					}
 				}
 			}
 		}
