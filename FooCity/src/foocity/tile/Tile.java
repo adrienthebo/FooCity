@@ -1,8 +1,5 @@
 package foocity.tile;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /** Class: Tile
  * 
  * Defines the general properties of tiles and centralizes tile functionality.
@@ -64,16 +61,19 @@ public abstract class Tile {
 	}
 	
 	/**
-	 * Retrieve the total statistics for this tile. That is, what are the
-	 * statistics of this tile, taking into account the surrounding tiles.
 	 * 
-	 * @return
+	 * Code taken from http://www.java2s.com/Tutorial/Java/0125__Reflection/Gettheunqualifiednameofaclass.htm
+	 * 
+	 * @return The class name without the package extension.
 	 */
-	public Map<String, Integer> getAggregateStats() {
-		// TODO
-		Map<String, Integer> stats = new HashMap<String, Integer>();
-		return stats;
+	public String unqualifiedClassName() {
+		String name = getClass().getName();
+	    if (name.lastIndexOf('.') > 0) {
+	    	name = name.substring(name.lastIndexOf('.') + 1);
+	    }
+	    return name;
 	}
+	
 	/**
 	 * <p>Attempts to load a tile class based on the passed in tile name</p>
 	 * 
@@ -98,7 +98,7 @@ public abstract class Tile {
 			 * Build the full string so calling classes don't need to know
 			 * the fill class name of the requested tile. 
 			 */
-			String tileClassName = "foocity.tile." + tileName + "Tile";
+			String tileClassName = "foocity.tile." + tileName;
 			holder = (Class<Tile>)Class.forName(tileClassName);
 		}
 		catch(ClassNotFoundException e) {
@@ -112,4 +112,5 @@ public abstract class Tile {
 		}
 		return holder;
 	}
+
 }

@@ -10,7 +10,7 @@ public class TestTileGetSubTile {
 
 	@Test
 	public void getValidTile() {
-		Class<Tile> grass = Tile.getSubTile("Grass");
+		Class<Tile> grass = Tile.getSubTile("GrassTile");
 		assertNotNull(grass);
 	}
 	

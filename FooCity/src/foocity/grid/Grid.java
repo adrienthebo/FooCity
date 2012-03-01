@@ -1,12 +1,26 @@
 package foocity.grid;
 
+import javax.swing.event.EventListenerList;
+
+import java.util.Iterator;
+
 import foocity.tile.*;
 
 /**
+ * <p>
  * Representation of the game grid
+ * </p>
  * 
+ * <p>
  * This class provides access to the members of the grid, and provides methods
  * for safely interacting with the underlying elements.
+ * </p>
+ * 
+ * <p>
+ * This class can generate events, but it has a custom event type, the
+ * GridEvent, that indicates the coordinates of an update as well as the update
+ * made. See the GridEvent class for more information.
+ * </p>
  */
 public class Grid {
 	
@@ -18,14 +32,16 @@ public class Grid {
 	private int _xSize;
 	private int _ySize;
 	
+	private EventListenerList _listeners = new EventListenerList();
+	
 	/**
 	 * Generates a game grid of the specified size.
 	 * 
 	 * <pre><b>Example:</b></pre>
 	 * 
-	 * <code>
+	 * <pre>
 	 * Grid gameGrid = new Grid(10, 10);
-	 * </code>
+	 * </pre>
 	 * 
 	 * @param xSize the size of the grid X axis
 	 * @param ySize the size of the grid Y axis
@@ -41,6 +57,16 @@ public class Grid {
 	 * Generates a game grid from a 2D array of tile names.
 	 * </p>
 	 * 
+	 * <pre>
+	 * String[][] tiles = {
+	 *   {"Tile00", "Tile01"},
+	 *   {"Tile10", "Tile11"},
+	 *   {"Tile20", "Tile21"},
+	 * };
+	 * 
+	 * Grid newGrid = new Grid(tiles);
+	 * </pre>
+	 *   
 	 * <p>
 	 * XXX This currently does not check if the 2D array is irregular. It
 	 * assumes that the length of the first nested array is the length of the
@@ -69,25 +95,32 @@ public class Grid {
 		return _ySize;
 	}
 	/**
-	 * Provides the intern'd class name. This is done to encapsulate the
-	 * underlying grid members.
+	 * <p>
+	 * Provides the class name as a string of the tile at the given location.
+	 * This is done to encapsulate the underlying grid members.
+	 * </p>
 	 * 
 	 * @param xAxis the zero indexed X coordinate
 	 * @param yAxis the zero indexed Y coordinate
 	 * 
 	 * @return the class type of the tile at the given axis
 	 */
-	@SuppressWarnings("unchecked") // XXX this is lazy
 	public String getTile(int xAxis, int yAxis) {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
 		
-		Class<Tile> tileClass = (Class<Tile>) _tiles[xAxis][yAxis].getClass();
-		return tileClass.getName().intern();
+		Tile thisTile = _tiles[xAxis][yAxis];
+		return thisTile.unqualifiedClassName();
 	}
 	
 	/**
+	 * <p>
 	 * Sets the tile type at the specified location
+	 * </p>
+	 * 
+	 * <p>
+	 * This method will generate a GridEvent upon success.
+	 * </p>
 	 * 
 	 * @param xAxis the X coordinate
 	 * @param yAxis the Y coordinate
@@ -99,14 +132,20 @@ public class Grid {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
 
+		Tile oldTile = _tiles[xAxis][yAxis];
+		
 		try {
 			// Attempt to retrieve the class of the tile we're generating.
 			Class<Tile> newTileClass = Tile.getSubTile(tileClass);
-			
+						
 			if(newTileClass != null) {
 				// Do some sweet sweet metaprogramming magic.
 				Tile newTile = newTileClass.newInstance();
 				_tiles[xAxis][yAxis] = newTile;
+				
+				//Fire event to notify listeners
+				fireGridUpdated(xAxis, yAxis, oldTile, newTile);
+				
 				return true;
 			}
 			else {
@@ -115,8 +154,14 @@ public class Grid {
 				 * XXX Should we just be aborting here since this error should
 				 * only be encountered on developer error?
 				 */
-				System.err.println("Unable to instantiate requested tile \"" + tileClass + "\" at index " + xAxis + ", " + yAxis);
-				System.err.println(Thread.currentThread().getStackTrace());
+				System.err.println("WARNING: Unable to instantiate requested tile \"" + tileClass + "\" at index " + xAxis + ", " + yAxis);
+				
+				/*
+				 * XXX This is a very janky solution, but the alternative of
+				 * printing our own stack trace really is not worth the effort.
+				 */
+				new Throwable().printStackTrace();
+				
 				return false;
 			}
 		} catch (Exception e) {
@@ -127,6 +172,41 @@ public class Grid {
 			 *  there's probably nothing we can do.
 			 */
 			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * @return An iterator for the current grid.
+	 */
+	public Iterator<String> getIterator() {
+		return new GridIterator(this);
+	}
+	
+	public void addGridListener(GridListener listener) {
+		_listeners.add(GridListener.class, listener);
+	}
+	
+	public void removeGridListener(GridListener listener) {
+		_listeners.remove(GridListener.class, listener);
+	}
+	
+	/**
+	 * <p>
+	 * XXX This class only expects GridListeners to attach to this, and so will
+	 * fail with nasty type casting errors if this somehow isn't the case.
+	 * </p>
+	 * @param xAxis the X axis of the event
+	 * @param yAxis the Y axis of the event
+	 * @param oldTile
+	 * @param newTile
+	 */
+	protected void fireGridUpdated(int xAxis, int yAxis, Tile oldTile, Tile newTile) {
+		Object[] listeners = _listeners.getListenerList();
+		
+		GridEvent event = new GridEvent(this, xAxis, yAxis, oldTile, newTile);
+		for(Object l : listeners ){
+			GridListener listener = (GridListener)l;
+			listener.gridUpdated(event);
 		}
 	}
 }
