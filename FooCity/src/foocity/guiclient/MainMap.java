@@ -39,22 +39,17 @@ public class MainMap
 {
 	// Path Constants--will remove
 	private String TERRAINPATH = "/home/cchen/git/FooCity/contrib/terrain/";
-	private String TILEPATH = "/home/cchen/git/FooCity/contrib/foo-tiles/";
 
-	// Size Constants--map grid, icon size
+	// Size Constants--map grid size
 	private final int WIDTH = 128;
 	private final int HEIGHT = 128;
-	private final int ICONSIZE = 36;
-	private final int ICONSIZE_MINI = 8;
 	
-	// Map is held as a 2-d array of char
-	private char[][] mapGrid;
-	// The actual buttons displayed to the user
-	private JButton[][] mapButtons;	
 	// The main application frame
 	private JFrame frmFoocity;
 	// The Toolbar
 	private JToolBar toolBar;
+	// LargeMap Data
+	private Map mapData;
 	// The map panel
 	private JPanel mapPanel;
 	// The status bar at the bottom of the screen
@@ -183,7 +178,7 @@ public class MainMap
 		mntmNewMenuItem_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadMapFile(TERRAINPATH + "001.txt");
-				refreshMap();
+//				refreshMap();
 			}
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_8);
@@ -192,7 +187,7 @@ public class MainMap
 		mntmNewMenuItem_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadMapFile(TERRAINPATH + "002.txt");
-				refreshMap();
+//				refreshMap();
 			}
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_9);
@@ -253,17 +248,28 @@ public class MainMap
 		JScrollPane mapPane = new JScrollPane();
 		frmFoocity.getContentPane().add(mapPane, BorderLayout.CENTER);
 
-		mapPanel = new JPanel();
+		mapData = new Map(HEIGHT, WIDTH);
+		
+		mapPanel = mapData.largeMap(this);
 		mapPane.setViewportView(mapPanel);
-		mapPanel.setLayout(new GridLayout(128, 128, 0, 0));
-
-		mapGrid = new char[HEIGHT][WIDTH];
-		mapButtons = new JButton[HEIGHT][WIDTH];
-
-		initializeMap();
-		refreshMap();
 	}
 
+	private void createMiniMapView()
+	{
+		miniMapView = new JDialog(frmFoocity, false);
+		miniMapView.setTitle("Mini Map");
+		miniMapView.setBounds(100, 100, 450, 300);
+		miniMapView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		
+		miniMapView.add(mapData.miniMap());
+	}
+	
+	private void showMiniMapView(boolean setting)
+	{
+		if (miniMapView.isVisible() != setting)
+			miniMapView.setVisible(setting);
+	}
+	
 	private void createReportView()
 	{
 		reportView = new JDialog(frmFoocity, false);
@@ -276,20 +282,6 @@ public class MainMap
 	{
 		if (reportView.isVisible() != setting)
 			reportView.setVisible(setting);
-	}
-
-	private void createMiniMapView()
-	{
-		miniMapView = new JDialog(frmFoocity, false);
-		miniMapView.setTitle("Mini Map");
-		miniMapView.setBounds(100, 100, 450, 300);
-		miniMapView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-	}
-	
-	private void showMiniMapView(boolean setting)
-	{
-		if (miniMapView.isVisible() != setting)
-			miniMapView.setVisible(setting);
 	}
 	
 	private void createStatusBar()
@@ -311,56 +303,7 @@ public class MainMap
 	{
 		JOptionPane.showMessageDialog(frmFoocity, message, "Whoops", JOptionPane.WARNING_MESSAGE);
 	}
- 	
-	private ImageIcon tileImage(char tileType)
-	{
-		String tileFile;
-		
-		switch(tileType) {
-			case 'B':	tileFile = "beach.png";
-						break;
-			case 'D':	tileFile = "dirt.png";
-						break;
-			case 'G':	tileFile = "grass.png";
-						break;
-			case 'T':	tileFile = "tree.png";
-						break;
-			case 'W':	tileFile = "water.png";
-						break;
-			default:	tileFile = "dirt.png";
-		}
-		
-		return new ImageIcon(TILEPATH + tileFile);
-	}
-
-	private void initializeMap()
-	{
-		for (int row = 0; row < HEIGHT; row++) {
-			for (int col = 0; col < WIDTH; col++) {
-				final int _row = row;
-				final int _col = col;
-				mapButtons[row][col] = new JButton();
-				mapButtons[row][col].setPreferredSize(new Dimension(ICONSIZE, ICONSIZE));
-				mapButtons[row][col].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						replaceTile(_row, _col);
-					}
-				});
-				mapPanel.add(mapButtons[row][col]);
-			}
-		}
-	}
-	
-	private void refreshMap()
-	{
-		for (int row = 0; row < HEIGHT; row++) {
-			for (int col = 0; col < WIDTH; col++) {
-				ImageIcon tileImage = tileImage(mapGrid[row][col]);
-				mapButtons[row][col].setIcon(tileImage);
-			}
-		}
-	}
-	
+ 		
 	private void loadMapFile(String in_file)
 	{
 		File handle = new File(in_file);
@@ -388,7 +331,7 @@ public class MainMap
 			return;
 		}
 
-		mapGrid = newMapData;
+		mapData.updateMap(newMapData);
 		updateStatus("Loaded new map: " + in_file);
 	}
 
@@ -396,10 +339,9 @@ public class MainMap
 	{
 		char desiredTile = getChosenTool();
 		if (desiredTile != '\0') {
-			mapGrid[row][col] = desiredTile;
+	        mapData.updateTile(row, col, desiredTile);
 			updateStatus("Placed tile at: " + row + "," + col);
 		}
-		refreshMap();
 	}
 	
 	public char getChosenTool() {
