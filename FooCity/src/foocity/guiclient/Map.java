@@ -5,102 +5,120 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import java.util.Hashtable;
 
 
 public class Map {
 	// Path Constants--will remove
-	private String TILEPATH = "/home/cchen/git/FooCity/contrib/foo-tiles/";
+	private String TILEPATH = "/home/chchen/git/FooCity/contrib/foo-tiles/16px/";
 	
 	// Size Constants--map grid
 	private final int ICONSIZE = 36;
-	private final int ICONSIZE_MINI = 8;
+	private final int MINI_ICONSIZE = 4;
 
+	// Tile Types
+	private char[] tileLabels = {'B', 'D', 'G', 'T', 'W', '\0'};
+	
 	// How big is the map?
-	private int mapWidth = 128;
-	private int mapHeight = 128;
+	private int mapWidth;
+	private int mapHeight;
 
 	// The map panel
-	private JPanel mapPanel;
+	private JPanel largePanel;
+	private JPanel miniPanel;
 	
-	// Map is held as a 2-D array of char
-	private char[][] mapGrid;
-	// The actual buttons displayed to the user
-	private JButton[][] mapButtons;	
+	// A Hashtable of Icons
+	private Hashtable<Character, ImageIcon> tileIcons;
+	
+	// The actual buttons displayed to the user (large view)
+	private JButton[][] largeButtons;	
 
-	public Map(int height, int width)
+	// The actual icons displayed to the user (mini view)
+	private JButton[][] miniButtons;	
+	
+	public Map(MainMap client, int height, int width)
 	{
 		mapHeight = height;
 		mapWidth = width;
+		loadIcons();
+		createMapElements();
+		initializeMap(client, largePanel, largeButtons, ICONSIZE, true);
+		initializeMap(client, miniPanel, miniButtons, MINI_ICONSIZE, false);
 	}
 	
-	public JPanel largeMap(MainMap parentApp)
+	public JPanel largeMap()
 	{
-		createMapView();
-		initializeMap(parentApp, ICONSIZE);
-		refreshMap();	
-		return mapPanel;
+		return largePanel;
 	}
 	
 	public JPanel miniMap()
 	{
-		createMapView();
-		initializeMap(ICONSIZE_MINI);
-		refreshMap();
-		return mapPanel;
+		return miniPanel;
 	}
 
-	private void createMapView()
+	public void updateTile(int row, int col, char tileType)
 	{
-		mapPanel = new JPanel();
-		mapPanel.setLayout(new GridLayout(mapHeight, mapWidth, 0, 0));
-
-		mapGrid = new char[mapHeight][mapWidth];
-		mapButtons = new JButton[mapHeight][mapWidth];
+		ImageIcon icon = getIcon(tileType);
+		largeButtons[row][col].setIcon(icon);
+		miniButtons[row][col].setIcon(icon);
 	}
 
-	private void initializeMap(final MainMap parentApp, int iconSize)
+	public void updateMap(char[][] tileTypes)
+	{
+		for (int _row = 0; _row < mapHeight ; _row++)
+		{
+			updateRow(_row, tileTypes[_row]);
+		}
+	}
+	
+	private void createMapElements()
+	{
+		largePanel = new JPanel();
+		largePanel.setLayout(new GridLayout(mapHeight, mapWidth, 0, 0));
+		largeButtons = new JButton[mapHeight][mapWidth];
+
+		miniPanel = new JPanel();
+		miniPanel.setLayout(new GridLayout(mapHeight, mapWidth, 0, 0));
+		miniButtons = new JButton[mapHeight][mapWidth];		
+	}
+
+	private void initializeMap(final MainMap client, JPanel panel, JButton[][] buttonGrid, int iconSize, boolean border)
 	{
 		for (int row = 0; row < mapHeight; row++) {
 			for (int col = 0; col < mapWidth; col++) {
 				final int _row = row;
 				final int _col = col;
-				mapButtons[row][col] = new JButton();
-				mapButtons[row][col].setPreferredSize(new Dimension(iconSize, iconSize));
-				mapButtons[row][col].addActionListener(new ActionListener() {
+				buttonGrid[row][col] = new JButton();
+				
+				if (border == false) // Useful for the minimap
+					buttonGrid[row][col].setBorder(BorderFactory.createEmptyBorder());
+	
+				buttonGrid[row][col].setPreferredSize(new Dimension(iconSize, iconSize));
+				buttonGrid[row][col].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						parentApp.replaceTile(_row, _col);
+						client.replaceTile(_row, _col);
 					}
 				});
-				mapPanel.add(mapButtons[row][col]);
-			}
-		}
-	}
-
-	private void initializeMap(int iconSize)
-	{
-		for (int row = 0; row < mapHeight; row++) {
-			for (int col = 0; col < mapWidth; col++) {
-				mapButtons[row][col] = new JButton();
-				mapButtons[row][col].setPreferredSize(new Dimension(iconSize, iconSize));
-				mapPanel.add(mapButtons[row][col]);
-			}
-		}
-	}
-
-	
-	private void refreshMap()
-	{
-		for (int row = 0; row < mapHeight; row++) {
-			for (int col = 0; col < mapWidth; col++) {
-				ImageIcon tileImage = tileImage(mapGrid[row][col]);
-				mapButtons[row][col].setIcon(tileImage);
+				panel.add(buttonGrid[row][col]);
 			}
 		}
 	}
 	
-	private ImageIcon tileImage(char tileType)
+	private void loadIcons()
+	{
+		tileIcons = new Hashtable<Character, ImageIcon>();
+		for (int i = 0; i < tileLabels.length; i++)
+		{
+			char key = tileLabels[i];
+			tileIcons.put(key, loadImage(key));
+		}
+	}
+	
+	private ImageIcon loadImage(char tileType)
 	{
 		String tileFile;
 		
@@ -121,25 +139,23 @@ public class Map {
 		return new ImageIcon(TILEPATH + tileFile);
 	}
 	
-	public void updateMap(char[][] tileTypes)
+	private ImageIcon getIcon(char tileType)
 	{
-		for (int _row = 0; _row < mapHeight ; _row++)
-		{
-			updateRow(_row, tileTypes[_row]);
-		}
+		if (tileIcons.containsKey(tileType))
+			return tileIcons.get(tileType);
+		else
+			return tileIcons.get('\0');
 	}
-
+	
 	private void updateRow(int row, char[] tileTypes)
 	{
 		for (int _col = 0; _col < mapWidth ; _col++)
 		{
-			mapButtons[row][_col].setIcon(tileImage(tileTypes[_col]));
+			ImageIcon icon = getIcon(tileTypes[_col]);
+			largeButtons[row][_col].setIcon(icon);
+			miniButtons[row][_col].setIcon(icon);
 		}
 	}
 	
-	public void updateTile(int row, int col, char tileType)
-	{
-		mapButtons[row][col].setIcon(tileImage(tileType));
-	}
 	
 }
