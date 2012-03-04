@@ -38,7 +38,7 @@ import javax.swing.JDialog;
 public class MainMap
 {
 	// Path Constants--will remove
-	private String TERRAINPATH = "/home/cchen/git/FooCity/contrib/terrain/";
+	private String TERRAINPATH = "/home/chchen/git/FooCity/contrib/terrain/";
 
 	// Size Constants--map grid size
 	private final int WIDTH = 128;
@@ -52,6 +52,8 @@ public class MainMap
 	private Map mapData;
 	// The map panel
 	private JPanel mapPanel;
+	// The map panel
+	private JPanel miniMapPanel;
 	// The status bar at the bottom of the screen
 	private JLabel statusBar;
 	// The report view window
@@ -178,7 +180,6 @@ public class MainMap
 		mntmNewMenuItem_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadMapFile(TERRAINPATH + "001.txt");
-//				refreshMap();
 			}
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_8);
@@ -187,7 +188,6 @@ public class MainMap
 		mntmNewMenuItem_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadMapFile(TERRAINPATH + "002.txt");
-//				refreshMap();
 			}
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_9);
@@ -248,9 +248,9 @@ public class MainMap
 		JScrollPane mapPane = new JScrollPane();
 		frmFoocity.getContentPane().add(mapPane, BorderLayout.CENTER);
 
-		mapData = new Map(HEIGHT, WIDTH);
+		mapData = new Map(this, HEIGHT, WIDTH);
 		
-		mapPanel = mapData.largeMap(this);
+		mapPanel = mapData.largeMap();
 		mapPane.setViewportView(mapPanel);
 	}
 
@@ -258,10 +258,14 @@ public class MainMap
 	{
 		miniMapView = new JDialog(frmFoocity, false);
 		miniMapView.setTitle("Mini Map");
-		miniMapView.setBounds(100, 100, 450, 300);
 		miniMapView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
-		miniMapView.add(mapData.miniMap());
+		JScrollPane mapPane = new JScrollPane();
+		miniMapView.getContentPane().add(mapPane, BorderLayout.CENTER);
+		
+		miniMapPanel = mapData.miniMap();
+		mapPane.setViewportView(miniMapPanel);
+		miniMapView.pack();
 	}
 	
 	private void showMiniMapView(boolean setting)
