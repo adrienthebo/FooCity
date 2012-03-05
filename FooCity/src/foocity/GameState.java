@@ -3,8 +3,21 @@ package foocity;
 import foocity.grid.Grid;
 
 /**
- * The GameState class is an aggregation of the different state components of a
- * specific game.
+ * <p>
+ * Representation of a particular game state.
+ * </p>
+ *
+ * <p>
+ * This class forms a representation of a specific game. All members should be
+ * either persistent while this game is active, or ensure that objects hand off
+ * event listeners so that state swap out is transparent and listening classes
+ * do not need to be aware of such a state change.
+ * </p>
+ *
+ * <p>
+ * However, this requirement raises the issue of how components will be
+ * notified of a full state change.
+ * </p>
  */
 public class GameState {
 	protected Grid _grid;
