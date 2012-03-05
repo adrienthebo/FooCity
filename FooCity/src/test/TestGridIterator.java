@@ -24,12 +24,12 @@ public class TestGridIterator {
 	
 	@Test
 	public void testIteration() {
-		assertEquals("GrassTile", _subject.next());
-		assertEquals("DirtTile", _subject.next());
-		assertEquals("CommercialTile", _subject.next());
-		assertEquals("IndustrialTile", _subject.next());
-		assertEquals("WaterTile", _subject.next());
-		assertEquals("ForestTile", _subject.next());
+		assertEquals("Grass", _subject.next());
+		assertEquals("Dirt", _subject.next());
+		assertEquals("Commercial", _subject.next());
+		assertEquals("Industrial", _subject.next());
+		assertEquals("Water", _subject.next());
+		assertEquals("Forest", _subject.next());
 		assertFalse(_subject.hasNext());
 	}
 	

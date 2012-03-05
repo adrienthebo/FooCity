@@ -19,10 +19,10 @@ public class TestNeighborSelector {
 		assertEquals(4, neighbors.length);
 		
 		String[] expected = {
-				"DirtTile",
-				"ResidentialTile",
-				"SolarPowerTile",
-				"ParkTile",
+				"Dirt",
+				"Residential",
+				"SolarPower",
+				"Park",
 		};
 
 		for(int i = 0; i < expected.length; i++)
@@ -37,18 +37,18 @@ public class TestNeighborSelector {
 		assertEquals(12, neighbors.length);
 		
 		String[] expected = {
-				"BeachTile",
-				"GrassTile",
-				"DirtTile",
-				"BeachTile",
-				"ForestTile",
-				"ResidentialTile",
-				"SolarPowerTile",
-				"DirtTile",
-				"PoliceStationTile",
-				"ParkTile",
-				"ParkTile",
-				"GrassTile",
+				"Beach",
+				"Grass",
+				"Dirt",
+				"Beach",
+				"Forest",
+				"Residential",
+				"SolarPower",
+				"Dirt",
+				"PoliceStation",
+				"Park",
+				"Park",
+				"Grass",
 		};
 
 		for(int i = 0; i < expected.length; i++)
@@ -61,11 +61,11 @@ public class TestNeighborSelector {
 		String[] tileNames = mapTilesToNames(neighbors);
 		
 		String[] expected = {
-				"DirtTile",
-				"BeachTile",
-				"GrassTile",
-				"GrassTile",
-				"ForestTile",
+				"Dirt",
+				"Beach",
+				"Grass",
+				"Grass",
+				"Forest",
 		};
 		
 		for(int i = 0; i < expected.length; i++) {
@@ -82,7 +82,7 @@ public class TestNeighborSelector {
 		String[] tileNames = new String[tiles.length];
 
 		for(int i = 0; i < tiles.length; i++)
-			tileNames[i] = tiles[i].unqualifiedClassName();
+			tileNames[i] = tiles[i].getType().getName();
 		
 		return tileNames;
 	}

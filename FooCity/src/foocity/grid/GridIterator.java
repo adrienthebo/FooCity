@@ -22,7 +22,7 @@ public class GridIterator implements Iterator<String> {
 
 	@Override
 	public String next() {
-		return _iter.next().unqualifiedClassName();
+		return _iter.next().getType().getName();
 	}
 
 	@Override
