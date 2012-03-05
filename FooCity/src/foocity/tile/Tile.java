@@ -1,116 +1,39 @@
 package foocity.tile;
 
-/** Class: Tile
- * 
- * Defines the general properties of tiles and centralizes tile functionality.
+/** 
+ * <p>
+ * Represents a specific location in a grid.
+ * </p>
+ *
+ * <p>
+ * This class acts as a collection of attributes at a single grid location. It
+ * stores the attributes of the tile type, and can calculate the net statistics
+ * of the location
+ * </p>
  */
-public abstract class Tile {
+public class Tile {
 	
-	/* Default all values to zero so that we don't need to blank out unused
-	 * fields everywhere else
-	 */
-	protected int _price = 0;
-	protected int _happiness = 0;
-	protected int _jobs = 0;
-	protected int _pollution = 0;
-	protected int _crime = 0;
-	protected int _housing = 0;
-	protected int _consumePower = 0;
-	protected int _producePower = 0;
-	protected int _consumeWater = 0;
-	protected int _produceWater = 0;
+	protected TileType _type;
 
-	public int getPrice() {
-		return _price;
+	public Tile(TileType type) {
+		_type = type;
 	}
 
-	public int getHappiness() {
-		return _happiness;
-	}
-
-	public int getJobs() {
-		return _jobs;
-	}
-
-	public int getPollution() {
-		return _pollution;
-	}
-
-	public int getCrime() {
-		return _crime;
-	}
-
-	public int getHousing() {
-		return _housing;
-	}
-
-	public int getConsumePower() {
-		return _consumePower;
-	}
-
-	public int getProducePower() {
-		return _producePower;
-	}
-
-	public int getConsumeWater() {
-		return _consumeWater;
-	}
-
-	public int getProduceWater() {
-		return _produceWater;
-	}
-	
-	/**
-	 * 
-	 * Code taken from http://www.java2s.com/Tutorial/Java/0125__Reflection/Gettheunqualifiednameofaclass.htm
-	 * 
-	 * @return The class name without the package extension.
-	 */
-	public String unqualifiedClassName() {
-		String name = getClass().getName();
-	    if (name.lastIndexOf('.') > 0) {
-	    	name = name.substring(name.lastIndexOf('.') + 1);
-	    }
-	    return name;
-	}
-	
-	/**
-	 * <p>Attempts to load a tile class based on the passed in tile name</p>
-	 * 
-	 * <p>
-	 * <em>Example:</em>
-	 * </p>
-	 * 
-	 * <code>
-	 *   Class&lt;Tile&gt; commTile = foocity.tile.Tile.getSubTile("Commercial");
-	 * </code>
-	 * 
-	 * <hr />
-	 * @param tileName
-	 * @return the requested tile class if it exists, else null
-	 */
-	@SuppressWarnings("unchecked")
-	public static Class<Tile> getSubTile(String tileName) {
-		Class<Tile> holder = null;
-		
-		try {
-			/*
-			 * Build the full string so calling classes don't need to know
-			 * the fill class name of the requested tile. 
-			 */
-			String tileClassName = "foocity.tile." + tileName;
-			holder = (Class<Tile>)Class.forName(tileClassName);
+	public Tile(String type) {
+		TileType newType = TileCollection.getByName(type);
+		if(newType != null) {
+			_type = newType;
 		}
-		catch(ClassNotFoundException e) {
-			/*
-			 * XXX Ideally we should log this event, but there's no logging
-			 * integrated into the application.
-			 * 
-			 * If this happens, an invalid tile was requested, so we're allowed
-			 * to discard the error and return null.
-			 */
+		else {
+			throw new IllegalArgumentException(type + " is not a valid tile name");
 		}
-		return holder;
 	}
 
+	public TileType getType() {
+		return _type;
+	}
+
+	public void setType(TileType type) {
+		_type = type;
+	}
 }

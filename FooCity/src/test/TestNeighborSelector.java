@@ -82,7 +82,7 @@ public class TestNeighborSelector {
 		String[] tileNames = new String[tiles.length];
 
 		for(int i = 0; i < tiles.length; i++)
-			tileNames[i] = tiles[i].unqualifiedClassName();
+			tileNames[i] = tiles[i].getType().getName();
 		
 		return tileNames;
 	}

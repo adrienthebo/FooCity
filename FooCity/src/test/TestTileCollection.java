@@ -29,10 +29,8 @@ public class TestTileCollection {
 		
 	}
 
-	
 	@Test
 	public void getInvalidTile() {
-		Class<Tile> noSuchTile = Tile.getSubTile("ThisIsNotATile");
-		assertNull(noSuchTile);
+		assertNull(TileCollection.getByName("ThisIsClearlyNotAValidTileNameUnlessSomeoneHasGoneOffTheDeepEnd"));
 	}
 }
