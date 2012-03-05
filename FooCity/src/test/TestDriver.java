@@ -15,7 +15,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         TestTileDelegation.class,
-        TestTileGetSubTile.class,
+        TestTileCollection.class,
         TestGridInstantiation.class,
         TestGridIterator.class,
         TestTaxRates.class,
