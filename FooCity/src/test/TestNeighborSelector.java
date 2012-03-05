@@ -9,7 +9,7 @@ import foocity.tile.Tile;
 
 public class TestNeighborSelector {
 
-	Grid _grid = new Grid(test.fixtures.GridFixtures.smallGrid);
+	Grid _grid = new Grid(test.fixtures.GridFixtures.smallStringGrid);
 	
 	@Test
 	public void testGetRadiusOne() {

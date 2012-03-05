@@ -1,13 +1,19 @@
 package test.fixtures;
 
 public class GridFixtures {
-	static public String[][] tinyGrid = {
+	static public String[][] tinyStringGrid = {
 			{ "Grass", "Dirt", },
 			{ "Commercial", "Industrial", },
 			{ "Water", "Forest", },
 		};
+
+	static public char[][] tinyCharGrid = {
+			{ 'G', 'D',},
+			{ '$', 'I',},
+			{ '~', 'F',},
+		};
 	
-	static public String[][] smallGrid = {
+	static public String[][] smallStringGrid = {
 		{"Grass", "Dirt", "Beach", "Water", "Water",},
 		{"Grass", "Grass", "Dirt", "Beach", "Beach",},
 		{"Forest", "Residential", "Commercial", "SolarPower", "Dirt",},
