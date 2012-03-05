@@ -3,8 +3,15 @@ package foocity.grid;
 import java.util.EventObject;
 
 /**
+ * <p>
+ * Stores a grid event with coordinates and state change.
+ * </p>
+ * 
+ * <p>
  * Provides an event object that returns the location of a grid update, the old
- * tile type, and the new tile type.
+ * tile type, and the new tile type. To receive these, implement the GridListener
+ * interface and attach to a given grid object.
+ * </p>
  */
 public class GridEvent extends EventObject {
 
