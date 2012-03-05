@@ -88,6 +88,42 @@ public class Grid {
 		}
 	}
 	
+	/**
+	 * <p>
+	 * Generates a game grid from a 2D array of characters
+	 * </p>
+	 * 
+	 * <pre>
+	 * char[][] tiles = {
+	 *   {'D', 'D',},
+	 *   {'D', 'G',},
+	 *   {'F', '~',},
+	 * };
+	 * 
+	 * Grid newGrid = new Grid(tiles);
+	 * </pre>
+	 *   
+	 * <p>
+	 * XXX This currently does not check if the 2D array is irregular. It
+	 * assumes that the length of the first nested array is the length of the
+	 * subsequent arrays.
+	 * </p>
+	 * 
+	 * @param newTiles a 2D array of tile names
+	 */
+	public Grid(char[][] newTiles) {
+		// Generate new empty grid
+		this(newTiles.length, newTiles[0].length);
+		
+		// Populate the grid by instantiating a tile at each location
+		for(int yIter = 0; yIter < _ySize; yIter++) {
+			for(int xIter = 0; xIter < _xSize; xIter++) {
+				char currentChar = newTiles[xIter][yIter];
+				_tiles[xIter][yIter] = new Tile(currentChar);
+			}
+		}
+	}
+	
 	public int getXSize() { 
 		return _xSize;
 	}
