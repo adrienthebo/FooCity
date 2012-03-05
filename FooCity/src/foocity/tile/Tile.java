@@ -15,10 +15,29 @@ public class Tile {
 	
 	protected TileType _type;
 
+	/**
+	 * <p>
+	 * Generate a Tile with a preexisting type.
+	 * </p>
+	 *
+	 * <pre>
+	 * TileType t = BeachTile.newType();
+	 * Tile myTile = new Tile(t);
+	 * </pre>
+	 */
 	public Tile(TileType type) {
 		_type = type;
 	}
 
+	/**
+	 * <p>
+	 * Generate a Tile and set the type by a name
+	 * </p>
+	 *
+	 * <pre>
+	 * Tile myTile = new Tile("Beach");
+	 * </pre>
+	 */
 	public Tile(String type) {
 		TileType newType = TileCollection.instance().getByName(type);
 		if(newType != null) {
@@ -29,6 +48,15 @@ public class Tile {
 		}
 	}
 	
+	/**
+	 * <p>
+	 * Generate a Tile and set the type by a character representation of a tile
+	 * </p>
+	 *
+	 * <pre>
+	 * Tile myTile = new Tile('B');
+	 * </pre>
+	 */
 	public Tile(char c) {
 		TileType newType = TileCollection.getByChar(c);
 		if(newType != null) {
