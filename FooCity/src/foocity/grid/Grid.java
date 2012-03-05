@@ -78,14 +78,7 @@ public class Grid {
 	public Grid(String[][] newTiles) {
 		// Generate new empty grid
 		this(newTiles.length, newTiles[0].length);
-		
-		// Populate the grid by instantiating a tile at each location
-		for(int yIter = 0; yIter < _ySize; yIter++) {
-			for(int xIter = 0; xIter < _xSize; xIter++) {
-				String currentTileName = newTiles[xIter][yIter];
-				_tiles[xIter][yIter] = new Tile(currentTileName);
-			}
-		}
+		gridFromStrings(newTiles);
 	}
 	
 	/**
@@ -114,14 +107,7 @@ public class Grid {
 	public Grid(char[][] newTiles) {
 		// Generate new empty grid
 		this(newTiles.length, newTiles[0].length);
-		
-		// Populate the grid by instantiating a tile at each location
-		for(int yIter = 0; yIter < _ySize; yIter++) {
-			for(int xIter = 0; xIter < _xSize; xIter++) {
-				char currentChar = newTiles[xIter][yIter];
-				_tiles[xIter][yIter] = new Tile(currentChar);
-			}
-		}
+		gridFromChars(newTiles);
 	}
 	
 	public int getXSize() { 
@@ -131,6 +117,7 @@ public class Grid {
 	public int getYSize() {
 		return _ySize;
 	}
+
 	/**
 	 * <p>
 	 * Provides the class name as a string of the tile at the given location.
@@ -176,7 +163,7 @@ public class Grid {
 		if(newType != null) {
 			thisTile.setType(newType);
 
-			if(thisTile != null) { //Only fire tile events on generated grids
+			if(thisTile != null) {
 				/* If we're still populating the grid, existing grid elements
 				 * will be empty. Firing grid events on null tiles is 
 				 * 1) meaningless and 2) kinda dangerous. Only fire an event
@@ -192,7 +179,49 @@ public class Grid {
 			return false;
 		}
 	}
+
+	/**
+	 * <pre>
+	 * Populate a grid from a grid of strings naming tiles
+	 * </pre>
+	 *
+	 * <pre>
+	 * Note that this will *NOT* trigger events.
+	 * </pre>
+	 *
+	 * @param tiles a 2D array of tile names
+	 */
+	protected void gridFromStrings(String[][] tiles) {
+		// Populate the grid by instantiating a tile at each location
+		for(int yIter = 0; yIter < _ySize; yIter++) {
+			for(int xIter = 0; xIter < _xSize; xIter++) {
+				String currentTileName = tiles[xIter][yIter];
+				_tiles[xIter][yIter] = new Tile(currentTileName);
+			}
+		}
+	}
 	
+	/**
+	 * <pre>
+	 * Populate a grid from a grid of strings naming tiles
+	 * </pre>
+	 *
+	 * <pre>
+	 * Note that this will *NOT* trigger events.
+	 * </pre>
+	 *
+	 * @param tiles A 2D array of characters representing tiles
+	 */
+	protected void gridFromChars(char[][] tiles) {
+		// Populate the grid by instantiating a tile at each location
+		for(int yIter = 0; yIter < _ySize; yIter++) {
+			for(int xIter = 0; xIter < _xSize; xIter++) {
+				char currentChar = tiles[xIter][yIter];
+				_tiles[xIter][yIter] = new Tile(currentChar);
+			}
+		}
+	}
+
 	/**
 	 * @return An iterator for the current grid.
 	 */
@@ -214,8 +243,8 @@ public class Grid {
 	 * </p>
 	 * @param xAxis the X axis of the event
 	 * @param yAxis the Y axis of the event
-	 * @param oldTile
-	 * @param newTile
+	 * @param oldTile The name of the tile type being replaced
+	 * @param newTile The name of the replacing tile type
 	 */
 	protected void fireGridUpdated(int xAxis, int yAxis, String oldTile, String newTile) {
 		GridListener[] listeners = _listeners.getListeners(GridListener.class);
