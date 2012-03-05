@@ -32,7 +32,7 @@ public class Grid {
 	private int _xSize;
 	private int _ySize;
 	
-	private EventListenerList _listeners = new EventListenerList();
+	protected EventListenerList _listeners = new EventListenerList();
 	
 	/**
 	 * Generates a game grid of the specified size.
