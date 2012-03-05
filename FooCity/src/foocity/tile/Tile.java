@@ -28,6 +28,16 @@ public class Tile {
 			throw new IllegalArgumentException(type + " is not a valid tile name");
 		}
 	}
+	
+	public Tile(char c) {
+		TileType newType = TileCollection.getByChar(c);
+		if(newType != null) {
+			_type = newType;
+		}
+		else {
+			throw new IllegalArgumentException(c + " is not a valid tile chacter representation");
+		}
+	}
 
 	public TileType getType() {
 		return _type;
