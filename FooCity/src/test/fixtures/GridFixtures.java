@@ -2,16 +2,16 @@ package test.fixtures;
 
 public class GridFixtures {
 	static public String[][] tinyGrid = {
-			{ "GrassTile", "DirtTile", },
-			{ "CommercialTile", "IndustrialTile", },
-			{ "WaterTile", "ForestTile", },
+			{ "Grass", "Dirt", },
+			{ "Commercial", "Industrial", },
+			{ "Water", "Forest", },
 		};
 	
 	static public String[][] smallGrid = {
-		{"GrassTile", "DirtTile", "BeachTile", "WaterTile", "WaterTile",},
-		{"GrassTile", "GrassTile", "DirtTile", "BeachTile", "BeachTile",},
-		{"ForestTile", "ResidentialTile", "CommercialTile", "SolarPowerTile", "DirtTile",},
-		{"WaterPlantTile", "PoliceStationTile", "ParkTile", "ParkTile", "DirtTile",},
-		{"IndustrialTile", "DirtTile", "GrassTile", "ForestTile", "DirtTile", },
+		{"Grass", "Dirt", "Beach", "Water", "Water",},
+		{"Grass", "Grass", "Dirt", "Beach", "Beach",},
+		{"Forest", "Residential", "Commercial", "SolarPower", "Dirt",},
+		{"WaterPlant", "PoliceStation", "Park", "Park", "Dirt",},
+		{"Industrial", "Dirt", "Grass", "Forest", "Dirt", },
 	};
 }

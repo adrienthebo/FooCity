@@ -32,11 +32,11 @@ public class TestGridInstantiation {
 		assertEquals(_subject.getYSize(), 2);
 		
 		// Assert that the locations are right
-		assertEquals("GrassTile", _subject.getTile(0,0).toString());
-		assertEquals("DirtTile", _subject.getTile(0,1).toString());
-		assertEquals("CommercialTile", _subject.getTile(1,0).toString());
-		assertEquals("IndustrialTile", _subject.getTile(1,1).toString());
-		assertEquals("WaterTile", _subject.getTile(2,0).toString());
-		assertEquals("ForestTile", _subject.getTile(2,1).toString());
+		assertEquals("Grass", _subject.getTile(0,0).toString());
+		assertEquals("Dirt", _subject.getTile(0,1).toString());
+		assertEquals("Commercial", _subject.getTile(1,0).toString());
+		assertEquals("Industrial", _subject.getTile(1,1).toString());
+		assertEquals("Water", _subject.getTile(2,0).toString());
+		assertEquals("Forest", _subject.getTile(2,1).toString());
 	}
 }
