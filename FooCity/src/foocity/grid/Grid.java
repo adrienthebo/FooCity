@@ -254,4 +254,16 @@ public class Grid {
 			l.gridUpdated(event);
 		}
 	}
+
+	// XXX this needs tests
+	public char[][] toCharGrid() {
+		char[][] newGrid = new char[_xSize][_ySize];
+		for(int yIter = 0; yIter < _ySize; yIter++) {
+			for(int xIter = 0; xIter < _xSize; xIter++) {
+				newGrid[xIter][yIter] = _tiles[xIter][yIter].getType().getSymbol();
+			}
+		}
+
+		return newGrid;
+	}
 }
