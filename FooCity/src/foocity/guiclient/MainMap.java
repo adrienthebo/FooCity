@@ -35,6 +35,12 @@ import javax.swing.SwingConstants;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 
+import foocity.GameCalendar;
+import foocity.GameState;
+import foocity.StateManager;
+import foocity.TaxRates;
+import foocity.grid.Grid;
+
 public class MainMap
 {
 	// Path Constants--will remove
@@ -43,6 +49,15 @@ public class MainMap
 	// Size Constants--map grid size
 	private final int WIDTH = 128;
 	private final int HEIGHT = 128;
+	
+	// Model Elements
+	private Grid grid;
+	private GameCalendar gameCalendar;
+	private TaxRates taxRates;
+	private GameState gameState;
+	
+	// How we modify the model
+	private Controller controller;
 	
 	// The main application frame
 	private JFrame frmFoocity;
@@ -60,8 +75,6 @@ public class MainMap
 	private JDialog reportView;
 	// The mini map window
 	private JDialog miniMapView;
-	// The currently chosen tool (for tile placement)
-	private char chosenTool;
 
 	/**
 	 * Launch the application.
@@ -97,6 +110,8 @@ public class MainMap
 	 */
 	private void initialize()
 	{
+		initializeModels();
+		
 		frmFoocity = new JFrame();
 		frmFoocity.setTitle("FooCity");
 		frmFoocity.setBounds(100, 100, 450, 300);
@@ -179,7 +194,7 @@ public class MainMap
 		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Load Map 1");
 		mntmNewMenuItem_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loadMapFile(TERRAINPATH + "001.txt");
+//				loadMapFile(TERRAINPATH + "001.txt");
 			}
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_8);
@@ -187,7 +202,7 @@ public class MainMap
 		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Load Map 2");
 		mntmNewMenuItem_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				loadMapFile(TERRAINPATH + "002.txt");
+//				loadMapFile(TERRAINPATH + "002.txt");
 			}
 		});
 		mnNewMenu_3.add(mntmNewMenuItem_9);
@@ -201,39 +216,44 @@ public class MainMap
 		updateStatus("Welcome to FooCity!");
 	}
 	
+	private void initializeModels()
+	{
+		mapData = new Map(HEIGHT, WIDTH);
+	}
+	
 	private void createToolbar()
 	{
 		toolBar = new JToolBar();
 		frmFoocity.getContentPane().add(toolBar, BorderLayout.NORTH);
 		
-		toolBar.add(createToolButton("Commercial", 'C'));
-		toolBar.add(createToolButton("Industrial", 'I'));
-		toolBar.add(createToolButton("Residential", 'R'));
+		toolBar.add(createToolButton("Dirt", "Dirt"));
+		toolBar.add(createToolButton("Tree", "Forest"));
+		toolBar.add(createToolButton("Water", "Water"));
 	}
 	
-	private JToggleButton createToolButton(final String toolName, final char tileType)
+	private JToggleButton createToolButton(final String toolName, final String tileType)
 	{
 		JToggleButton newButton = new JToggleButton(toolName);
 		newButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				selectTool(toolName, tileType);
+				selectDesiredTile(toolName, tileType);
 			}
 		});		
 		return newButton;
 	}
 	
-	private void selectTool(String toolName, char tileType)
+	private void selectDesiredTile(String toolName, String tileType)
 	{
 		int num_tools = toolBar.getComponentCount();
 		for (int i = 0; i < num_tools ; i++) {
 			JToggleButton tool = (JToggleButton) toolBar.getComponent(i);
 			if (tool.getText() == toolName) {
 				if (tool.isSelected() == true) {
-					setChosenTool(tileType);
+					mapData.setDesiredTile(tileType);
 					updateStatus("Tile placement mode, type: " + toolName);
 				}
 				else {
-					setChosenTool('\0');
+					mapData.setDesiredTile(null);
 					updateStatus("Exiting tile placement mode");
 				}
 			}
@@ -247,8 +267,6 @@ public class MainMap
 	{
 		JScrollPane mapPane = new JScrollPane();
 		frmFoocity.getContentPane().add(mapPane, BorderLayout.CENTER);
-
-		mapData = new Map(this, HEIGHT, WIDTH);
 		
 		mapPanel = mapData.largeMap();
 		mapPane.setViewportView(mapPanel);
@@ -306,53 +324,5 @@ public class MainMap
 	private void alertUser(String message)
 	{
 		JOptionPane.showMessageDialog(frmFoocity, message, "Whoops", JOptionPane.WARNING_MESSAGE);
-	}
- 		
-	private void loadMapFile(String in_file)
-	{
-		File handle = new File(in_file);
-		char[][] newMapData = new char[HEIGHT][WIDTH];  
-		
-		try {
-			FileReader reader = new FileReader(handle);
-			BufferedReader stream = new BufferedReader(reader);
-
-			for (int row = 0; row < HEIGHT; row++) {
-				String in_line = stream.readLine().replace("\n", "");
-				if (in_line.length() == WIDTH) {
-					newMapData[row] = in_line.toCharArray();
-				}
-				else {
-					throw new IOException();
-				}
-			}
-		}
-
-		catch (FileNotFoundException e) {
-			return;
-		}
-		catch (IOException e) {
-			return;
-		}
-
-		mapData.updateMap(newMapData);
-		updateStatus("Loaded new map: " + in_file);
-	}
-
-	public void replaceTile(int row, int col)
-	{
-		char desiredTile = getChosenTool();
-		if (desiredTile != '\0') {
-	        mapData.updateTile(row, col, desiredTile);
-			updateStatus("Placed tile at: " + row + "," + col);
-		}
-	}
-	
-	public char getChosenTool() {
-		return chosenTool;
-	}
-
-	public void setChosenTool(char chosenTool) {
-		this.chosenTool = chosenTool;
 	}
 }

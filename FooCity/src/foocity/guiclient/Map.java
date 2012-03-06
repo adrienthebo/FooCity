@@ -9,10 +9,18 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+
+import foocity.grid.Grid;
+import foocity.grid.GridEvent;
+import foocity.grid.GridListener;
+
 import java.util.Hashtable;
 
 
-public class Map {
+public final class Map implements GridListener {
+	// The Grid Object
+	private Grid grid;
+	
 	// Path Constants--will remove
 	private String TILEPATH = "/home/chchen/git/FooCity/contrib/foo-tiles/16px/";
 	
@@ -21,7 +29,10 @@ public class Map {
 	private final int MINI_ICONSIZE = 4;
 
 	// Tile Types
-	private char[] tileLabels = {'B', 'D', 'G', 'T', 'W', '\0'};
+	private String[] tileLabels = {"BeachTile", "DirtTile", "GrassTile", "ForestTile", "WaterTile", ""};
+	
+	// The tile type we wish to place
+	private String desiredTile = null;
 	
 	// How big is the map?
 	private int mapWidth;
@@ -32,7 +43,7 @@ public class Map {
 	private JPanel miniPanel;
 	
 	// A Hashtable of Icons
-	private Hashtable<Character, ImageIcon> tileIcons;
+	private Hashtable<String, ImageIcon> tileIcons;
 	
 	// The actual buttons displayed to the user (large view)
 	private JButton[][] largeButtons;	
@@ -40,14 +51,15 @@ public class Map {
 	// The actual icons displayed to the user (mini view)
 	private JButton[][] miniButtons;	
 	
-	public Map(MainMap client, int height, int width)
+	public Map(int height, int width)
 	{
 		mapHeight = height;
 		mapWidth = width;
+		initializeGrid();
 		loadIcons();
 		createMapElements();
-		initializeMap(client, largePanel, largeButtons, ICONSIZE, true);
-		initializeMap(client, miniPanel, miniButtons, MINI_ICONSIZE, false);
+		initializeMap(largePanel, largeButtons, ICONSIZE, true);
+		initializeMap(miniPanel, miniButtons, MINI_ICONSIZE, false);
 	}
 	
 	public JPanel largeMap()
@@ -60,19 +72,11 @@ public class Map {
 		return miniPanel;
 	}
 
-	public void updateTile(int row, int col, char tileType)
+	public void updateTile(int row, int col)
 	{
-		ImageIcon icon = getIcon(tileType);
+		ImageIcon icon = getIcon(grid.getTile(row, col));
 		largeButtons[row][col].setIcon(icon);
 		miniButtons[row][col].setIcon(icon);
-	}
-
-	public void updateMap(char[][] tileTypes)
-	{
-		for (int _row = 0; _row < mapHeight ; _row++)
-		{
-			updateRow(_row, tileTypes[_row]);
-		}
 	}
 	
 	private void createMapElements()
@@ -85,8 +89,19 @@ public class Map {
 		miniPanel.setLayout(new GridLayout(mapHeight, mapWidth, 0, 0));
 		miniButtons = new JButton[mapHeight][mapWidth];		
 	}
+	
+	private void initializeGrid()
+	{
+		String initialGrid[][] = new String[mapWidth][mapHeight];
+		for (int col = 0; col < mapWidth ; col++)
+			for (int row = 0; row < mapHeight; row++)
+				initialGrid[col][row] = "Water";
+		
+		grid = new Grid(initialGrid);
+		grid.addGridListener(this);
+	}
 
-	private void initializeMap(final MainMap client, JPanel panel, JButton[][] buttonGrid, int iconSize, boolean border)
+	private void initializeMap(JPanel panel, JButton[][] buttonGrid, int iconSize, boolean border)
 	{
 		for (int row = 0; row < mapHeight; row++) {
 			for (int col = 0; col < mapWidth; col++) {
@@ -100,7 +115,7 @@ public class Map {
 				buttonGrid[row][col].setPreferredSize(new Dimension(iconSize, iconSize));
 				buttonGrid[row][col].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						client.replaceTile(_row, _col);
+						placeTile(_row, _col);
 					}
 				});
 				panel.add(buttonGrid[row][col]);
@@ -110,52 +125,60 @@ public class Map {
 	
 	private void loadIcons()
 	{
-		tileIcons = new Hashtable<Character, ImageIcon>();
+		tileIcons = new Hashtable<String, ImageIcon>();
 		for (int i = 0; i < tileLabels.length; i++)
 		{
-			char key = tileLabels[i];
+			String key = tileLabels[i];
 			tileIcons.put(key, loadImage(key));
 		}
 	}
 	
-	private ImageIcon loadImage(char tileType)
+	private ImageIcon loadImage(String tileType)
 	{
 		String tileFile;
 		
-		switch(tileType) {
-			case 'B':	tileFile = "beach.png";
-						break;
-			case 'D':	tileFile = "dirt.png";
-						break;
-			case 'G':	tileFile = "grass.png";
-						break;
-			case 'T':	tileFile = "tree.png";
-						break;
-			case 'W':	tileFile = "water.png";
-						break;
-			default:	tileFile = "water.png";
-		}
+		if (tileType == "Beach")
+			tileFile = "beach.png";
+		else if (tileType == "Dirt")
+			tileFile = "dirt.png";
+		else if (tileType == "Grass")
+			tileFile = "grass.png";
+		else if (tileType == "Forest")
+			tileFile = "tree.png";
+		else if (tileType == "Water")
+			tileFile = "water.png";
+		else
+			tileFile = "dirt.png";
 		
 		return new ImageIcon(TILEPATH + tileFile);
 	}
 	
-	private ImageIcon getIcon(char tileType)
+	private ImageIcon getIcon(String tileType)
 	{
 		if (tileIcons.containsKey(tileType))
 			return tileIcons.get(tileType);
 		else
-			return tileIcons.get('\0');
+			return tileIcons.get("");
+	}
+
+	@Override
+	public void gridUpdated(GridEvent e) {
+		updateTile(e.getYAxis(), e.getXAxis());
 	}
 	
-	private void updateRow(int row, char[] tileTypes)
+	public void placeTile(int row, int col)
 	{
-		for (int _col = 0; _col < mapWidth ; _col++)
-		{
-			ImageIcon icon = getIcon(tileTypes[_col]);
-			largeButtons[row][_col].setIcon(icon);
-			miniButtons[row][_col].setIcon(icon);
-		}
+		String tileType = getDesiredTile();
+		if (tileType != null)
+			grid.setTile(col, row, tileType);
 	}
-	
+
+	public String getDesiredTile() {
+		return desiredTile;
+	}
+
+	public void setDesiredTile(String desiredTile) {
+		this.desiredTile = desiredTile;
+	}	
 	
 }
