@@ -5,17 +5,29 @@ import foocity.tile.type.*;
 
 
 /**
+ * <p>
  * Collect and reference all tile instances
+ * </p>
  *
- * This class is a singleton instance meant to contain all tile types existing
- * in the system. It also serves to instantiate the basic tile types, and
- * provide a facility for adding new types.
+ * <p>
+ * This class contains a static reference to itself so that there can be a
+ * global point of tile registration. However, for testing purposes standalone
+ * instances can be generated so that subcollections can be used.
+ * </p>
+ *
+ * <p>
+ * The class singleton instance will also instantiate all basic tile types.
+ * </p>
  */
 public class TileCollection {
 	
 	private List<TileType> _types = new ArrayList<TileType>();
-	private static TileCollection _self = new TileCollection();
+	private static TileCollection _self = new TileCollection().instantiateBaseTypes();
 	
+	/**
+	 *
+	 * @param name The TileType to retrieve by name
+	 */
 	static public TileType getByName(String name) {
 		for(TileType current : _self._types) {
 			if(current.getName().equals(name))
@@ -24,6 +36,10 @@ public class TileCollection {
 		return null;
 	}
 	
+	/**
+	 *
+	 * @param symbol The TileType to retrieve, based on the character representation
+	 */
 	static public TileType getByChar(char symbol){
 		for(TileType current : _self._types) {
 			if(current.getSymbol() == symbol)
@@ -32,16 +48,22 @@ public class TileCollection {
 		return null;
 	}
 
-	public void add(TileType newType) {
-		_types.add(newType);
+	public static void add(TileType newType) {
+		_self._types.add(newType);
 	}
 
 	private TileCollection() {
 		instantiateBaseTypes();
 	}
-	
-	// This makes me feel like a bad person.
-	private void instantiateBaseTypes() {
+
+	/**
+	 * <p>
+	 * Instantiate all the base TileTypes that come with the application.
+	 * </p>
+	 *
+	 * @return The instantiated TileCollection - this facilitates operation chaining.
+	 */
+	private TileCollection instantiateBaseTypes() {
 
 		_types.add(BeachTile.newType());
 		_types.add(CoalPowerTile.newType());
@@ -58,5 +80,7 @@ public class TileCollection {
 		_types.add(WaterPlantTile.newType());
 		_types.add(WaterTile.newType());
 		_types.add(WindPowerTile.newType());
+
+		return this;
 	}
 }
