@@ -135,7 +135,7 @@ public class Grid {
 
 		Tile thisTile = _tiles[xAxis][yAxis];
 
-		TileType newType = TileCollection.getByName(tileName);
+		TileType newType = TileCollection.instance().getByName(tileName);
 
 		if(newType != null) {
 			thisTile.setType(newType);
