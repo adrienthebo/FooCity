@@ -93,10 +93,6 @@ public class TileCollection {
 	}
 
 
-	private TileCollection() {
-		instantiateBaseTypes();
-	}
-
 	/**
 	 * <p>
 	 * Instantiate all the base TileTypes that come with the application.
