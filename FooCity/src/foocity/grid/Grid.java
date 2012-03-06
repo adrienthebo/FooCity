@@ -174,8 +174,7 @@ public class Grid {
 	
 	/**
 	 * <p>
-	 * XXX This class only expects GridListeners to attach to this, and so will
-	 * fail with nasty type casting errors if this somehow isn't the case.
+	 * Sends a GridEvent to all registered GridListeners
 	 * </p>
 	 * @param xAxis the X axis of the event
 	 * @param yAxis the Y axis of the event
@@ -183,12 +182,11 @@ public class Grid {
 	 * @param newTile
 	 */
 	protected void fireGridUpdated(int xAxis, int yAxis, String oldTile, String newTile) {
-		Object[] listeners = _listeners.getListenerList();
-		
+		GridListener[] listeners = _listeners.getListeners(GridListener.class);
+
 		GridEvent event = new GridEvent(this, xAxis, yAxis, oldTile, newTile);
-		for(Object l : listeners ){
-			GridListener listener = (GridListener)l;
-			listener.gridUpdated(event);
+		for(GridListener l : listeners ){
+			l.gridUpdated(event);
 		}
 	}
 }
