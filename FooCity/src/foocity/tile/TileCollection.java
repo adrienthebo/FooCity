@@ -92,10 +92,23 @@ public class TileCollection {
 		return false;
 	}
 
+	/**
+	 * @return An array of all registered TileType names
+	 */
+	public String[] getNames() {
+		String[] names = new String[_types.size()];
+
+		for(int i = 0; i < _types.size(); i++) {
+			names[i] = _types.get(i).getName();
+		}
+
+		return names;
+	}
 
 	/**
 	 * <p>
 	 * Instantiate all the base TileTypes that come with the application.
+	 * This should only be called by the static instance.
 	 * </p>
 	 *
 	 * @return The instantiated TileCollection - this facilitates operation chaining.
