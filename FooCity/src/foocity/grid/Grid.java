@@ -50,6 +50,9 @@ public class Grid {
 		_xSize = xSize;
 		_ySize = ySize;
 		_tiles = new Tile[xSize][ySize];
+		/* FIXME the grid tiles should be initialized to a default value to 
+		 * prevent null pointer exceptions.
+		 */
 	}
 	
 	/**
