@@ -14,7 +14,7 @@ public class ParkTile {
 		attrs.put(TileAttribute.POLLUTION, -3);
 		attrs.put(TileAttribute.CONSUME_POWER, 10);
 		attrs.put(TileAttribute.CONSUME_WATER, 5);
-		
+
 		return new TileType("Park", 'P', attrs);
 	}
 }

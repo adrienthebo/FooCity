@@ -14,7 +14,7 @@ public class NaturalGasTile {
 		attrs.put(TileAttribute.POLLUTION, 3);
 		attrs.put(TileAttribute.PRODUCE_POWER, 2500);
 		attrs.put(TileAttribute.CONSUME_WATER, 10);
-		
+
 		return new TileType("NaturalGas", 'N', attrs);
 	}
 }

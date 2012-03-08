@@ -11,14 +11,14 @@ import foocity.event.*;
  * simpler interface and support for Event Listeners.
  */
 public class GameCalendar implements PropertyChangeGenerator {
-	
+
 	private EventListenerList _listeners = new EventListenerList();
 	private Calendar _calendar;
-	
+
 	public GameCalendar(Calendar newCalendar) {
 		_calendar = newCalendar;
 	}
-	
+
 	/**
 	 * Adds a month to the current date.
 	 */
@@ -28,17 +28,17 @@ public class GameCalendar implements PropertyChangeGenerator {
 		Object newCalendar = _calendar.clone();
 		EventGenerator.firePropertyChangeEvent(this, _listeners, "Calendar", oldCalendar, newCalendar);
 	}
-	
+
 	@Override
 	public String toString() {
 		return _calendar.toString();
 	}
-	
+
 	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		_listeners.add(PropertyChangeListener.class, listener);
 	}
-	
+
 	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		_listeners.remove(PropertyChangeListener.class, listener);

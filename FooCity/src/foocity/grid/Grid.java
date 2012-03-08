@@ -10,12 +10,12 @@ import foocity.tile.*;
  * <p>
  * Representation of the game grid
  * </p>
- * 
+ *
  * <p>
  * This class provides access to the members of the grid, and provides methods
  * for safely interacting with the underlying elements.
  * </p>
- * 
+ *
  * <p>
  * This class can generate events, but it has a custom event type, the
  * GridEvent, that indicates the coordinates of an update as well as the update
@@ -23,7 +23,7 @@ import foocity.tile.*;
  * </p>
  */
 public class Grid {
-	
+
 	/*
 	 *  The tiles themselves are exposed so that internal helper classes can
 	 *  directly access and update tile elements,
@@ -31,18 +31,18 @@ public class Grid {
 	protected Tile[][] _tiles;
 	private int _xSize;
 	private int _ySize;
-	
+
 	protected EventListenerList _listeners = new EventListenerList();
-	
+
 	/**
 	 * Generates a game grid of the specified size.
-	 * 
+	 *
 	 * <pre><b>Example:</b></pre>
-	 * 
+	 *
 	 * <pre>
 	 * Grid gameGrid = new Grid(10, 10);
 	 * </pre>
-	 * 
+	 *
 	 * @param xSize the size of the grid X axis
 	 * @param ySize the size of the grid Y axis
 	 */
@@ -50,32 +50,32 @@ public class Grid {
 		_xSize = xSize;
 		_ySize = ySize;
 		_tiles = new Tile[xSize][ySize];
-		/* FIXME the grid tiles should be initialized to a default value to 
+		/* FIXME the grid tiles should be initialized to a default value to
 		 * prevent null pointer exceptions.
 		 */
 	}
-	
+
 	/**
 	 * <p>
 	 * Generates a game grid from a 2D array of tile names.
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * String[][] tiles = {
 	 *   {"Tile00", "Tile01"},
 	 *   {"Tile10", "Tile11"},
 	 *   {"Tile20", "Tile21"},
 	 * };
-	 * 
+	 *
 	 * Grid newGrid = new Grid(tiles);
 	 * </pre>
-	 *   
+	 *
 	 * <p>
 	 * XXX This currently does not check if the 2D array is irregular. It
 	 * assumes that the length of the first nested array is the length of the
 	 * subsequent arrays.
 	 * </p>
-	 * 
+	 *
 	 * @param newTiles a 2D array of tile names
 	 */
 	public Grid(String[][] newTiles) {
@@ -83,28 +83,28 @@ public class Grid {
 		this(newTiles.length, newTiles[0].length);
 		gridFromStrings(newTiles);
 	}
-	
+
 	/**
 	 * <p>
 	 * Generates a game grid from a 2D array of characters
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * char[][] tiles = {
 	 *   {'D', 'D',},
 	 *   {'D', 'G',},
 	 *   {'F', '~',},
 	 * };
-	 * 
+	 *
 	 * Grid newGrid = new Grid(tiles);
 	 * </pre>
-	 *   
+	 *
 	 * <p>
 	 * XXX This currently does not check if the 2D array is irregular. It
 	 * assumes that the length of the first nested array is the length of the
 	 * subsequent arrays.
 	 * </p>
-	 * 
+	 *
 	 * @param newTiles a 2D array of tile names
 	 */
 	public Grid(char[][] newTiles) {
@@ -112,11 +112,11 @@ public class Grid {
 		this(newTiles.length, newTiles[0].length);
 		gridFromChars(newTiles);
 	}
-	
-	public int getXSize() { 
+
+	public int getXSize() {
 		return _xSize;
 	}
-	
+
 	public int getYSize() {
 		return _ySize;
 	}
@@ -126,29 +126,29 @@ public class Grid {
 	 * Provides the class name as a string of the tile at the given location.
 	 * This is done to encapsulate the underlying grid members.
 	 * </p>
-	 * 
+	 *
 	 * @param xAxis the zero indexed X coordinate
 	 * @param yAxis the zero indexed Y coordinate
-	 * 
+	 *
 	 * @return the class type of the tile at the given axis
 	 */
 	public String getTile(int xAxis, int yAxis) {
 		if(xAxis >= _xSize || yAxis >= _ySize)
 			throw new IndexOutOfBoundsException(); // XXX Does this need to be done explicitly?
-		
+
 		Tile thisTile = _tiles[xAxis][yAxis];
 		return thisTile.getType().getName();
 	}
-	
+
 	/**
 	 * <p>
 	 * Sets the tile type at the specified location
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * This method will generate a GridEvent upon success.
 	 * </p>
-	 * 
+	 *
 	 * @param xAxis the X coordinate
 	 * @param yAxis the Y coordinate
 	 * @param tileClass the name of the new tile class
@@ -168,7 +168,7 @@ public class Grid {
 
 			if(thisTile != null) {
 				/* If we're still populating the grid, existing grid elements
-				 * will be empty. Firing grid events on null tiles is 
+				 * will be empty. Firing grid events on null tiles is
 				 * 1) meaningless and 2) kinda dangerous. Only fire an event
 				 * on non-null old tiles.
 				 */
@@ -203,7 +203,7 @@ public class Grid {
 			}
 		}
 	}
-	
+
 	/**
 	 * <pre>
 	 * Populate a grid from a grid of strings naming tiles
@@ -231,15 +231,15 @@ public class Grid {
 	public Iterator<String> getIterator() {
 		return new GridIterator(this);
 	}
-	
+
 	public void addGridListener(GridListener listener) {
 		_listeners.add(GridListener.class, listener);
 	}
-	
+
 	public void removeGridListener(GridListener listener) {
 		_listeners.remove(GridListener.class, listener);
 	}
-	
+
 	/**
 	 * <p>
 	 * Sends a GridEvent to all registered GridListeners

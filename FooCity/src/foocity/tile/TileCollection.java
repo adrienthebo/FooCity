@@ -20,10 +20,10 @@ import foocity.tile.type.*;
  * </p>
  */
 public class TileCollection {
-	
+
 	private List<TileType> _types = new ArrayList<TileType>();
 	private static TileCollection _self = new TileCollection().instantiateBaseTypes();
-	
+
 	/**
 	 * @return The globally registered class instance
 	 */
@@ -33,7 +33,7 @@ public class TileCollection {
 
 	/**
 	 * <p>
-	 * Search the registered TileTypes for a type with a matching name 
+	 * Search the registered TileTypes for a type with a matching name
 	 * representation and return it.
 	 * </p>
 	 *
@@ -46,7 +46,7 @@ public class TileCollection {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * <p>
 	 * Search the registered TileTypes for a type with a matching character

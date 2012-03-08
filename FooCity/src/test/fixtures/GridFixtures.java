@@ -12,7 +12,7 @@ public class GridFixtures {
 			{ '$', 'I',},
 			{ '~', 'F',},
 		};
-	
+
 	static public String[][] smallStringGrid = {
 		{"Grass", "Dirt", "Beach", "Water", "Water",},
 		{"Grass", "Grass", "Dirt", "Beach", "Beach",},

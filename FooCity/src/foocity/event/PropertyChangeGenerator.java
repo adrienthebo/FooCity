@@ -9,6 +9,6 @@ import java.beans.PropertyChangeListener;
 public interface PropertyChangeGenerator {
 
 	public void addPropertyChangeListener(PropertyChangeListener listener);
-	
+
 	public void removePropertyChangeListener(PropertyChangeListener listener);
 }

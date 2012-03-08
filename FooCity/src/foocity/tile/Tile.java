@@ -1,6 +1,6 @@
 package foocity.tile;
 
-/** 
+/**
  * <p>
  * Represents a specific location in a grid.
  * </p>
@@ -12,7 +12,7 @@ package foocity.tile;
  * </p>
  */
 public class Tile {
-	
+
 	protected TileType _type;
 
 	/**
@@ -47,7 +47,7 @@ public class Tile {
 			throw new IllegalArgumentException(type + " is not a valid tile name");
 		}
 	}
-	
+
 	/**
 	 * <p>
 	 * Generate a Tile and set the type by a character representation of a tile

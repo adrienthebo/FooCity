@@ -19,7 +19,7 @@ public class TestTileType {
 		attrs.put(TileAttribute.PRODUCE_POWER, -800);
 		attrs.put(TileAttribute.CONSUME_WATER, -900);
 		attrs.put(TileAttribute.PRODUCE_WATER, -1000);
-		
+
 		return new TileType("TestType", '?', attrs);
 	}
 }

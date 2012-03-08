@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import foocity.tile.Tile;
 
 public class NeighborSelector {
-	
+
 	/**
 	 * <p>
 	 * Retrieve all surrounding tiles of a given tile within a given radius.
@@ -20,18 +20,18 @@ public class NeighborSelector {
 		/*
 		 * Scan all tiles within 2 * radius, X, and Y, if the distance <= r
 		 * then add it.
-		 * 
+		 *
 		 * It's inefficient but easy.
 		 */
-		
+
 		Point targetPoint = new Point(xAxis, yAxis);
-		
+
 		ArrayList<Tile> members = new ArrayList<Tile>();
-		
+
 		for(int xIter = (xAxis - radius); xIter <= (xAxis + radius); xIter++) {
 			for(int yIter = (yAxis - radius); yIter <= (yAxis + radius); yIter++) {
 				Point currentPoint = new Point(xIter, yIter);
-				
+
 				double distance = currentPoint.distance(targetPoint);
 				if(distance <= radius && distance >= 1) {
 					try {
@@ -43,10 +43,10 @@ public class NeighborSelector {
 				}
 			}
 		}
-		
+
 		Tile[] returnArray = new Tile[members.size()];
 		members.toArray(returnArray);
-		
+
 		return returnArray;
 	}
 }
