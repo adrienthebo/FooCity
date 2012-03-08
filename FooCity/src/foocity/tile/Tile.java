@@ -58,7 +58,7 @@ public class Tile {
 	 * </pre>
 	 */
 	public Tile(char c) {
-		TileType newType = TileCollection.getByChar(c);
+		TileType newType = TileCollection.instance().getByChar(c);
 		if(newType != null) {
 			_type = newType;
 		}
