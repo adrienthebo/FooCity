@@ -67,10 +67,16 @@ public class Tile {
 		}
 	}
 
+	/**
+	 * @return The current TileType associated with this tile
+	 */
 	public TileType getType() {
 		return _type;
 	}
 
+	/**
+	 * @param type The current TileType to associate with this tile
+	 */
 	public void setType(TileType type) {
 		_type = type;
 	}
