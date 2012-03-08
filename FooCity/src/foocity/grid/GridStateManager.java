@@ -21,6 +21,10 @@ public class GridStateManager {
 	public static boolean loadGrid(Grid grid, String fileName) {
 
 		char[][] map = loadMapFile(fileName);
+		if(map == null) {
+			// The loading method already failed and logged errors, MAYDAY MAYDAY WE'RE GOING DOWN EJECT
+			return false;
+		}
 
 		/* Ensure that the current grid and loaded map are the same
 		 * dimensions; if not then refuse to load.
