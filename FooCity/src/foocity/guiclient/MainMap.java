@@ -57,7 +57,7 @@ public class MainMap
 	private GameState gameState;
 	
 	// How we modify the model
-	private Controller controller;
+//	private Controller controller;
 	
 	// The main application frame
 	private JFrame frmFoocity;
@@ -226,31 +226,31 @@ public class MainMap
 		toolBar = new JToolBar();
 		frmFoocity.getContentPane().add(toolBar, BorderLayout.NORTH);
 		
-		toolBar.add(createToolButton("Dirt", "Dirt"));
-		toolBar.add(createToolButton("Tree", "Forest"));
-		toolBar.add(createToolButton("Water", "Water"));
+		toolBar.add(createToolButton("Dirt"));
+		toolBar.add(createToolButton("Forest"));
+		toolBar.add(createToolButton("Water"));
 	}
 	
-	private JToggleButton createToolButton(final String toolName, final String tileType)
+	private JToggleButton createToolButton(final String tileType)
 	{
-		JToggleButton newButton = new JToggleButton(toolName);
+		JToggleButton newButton = new JToggleButton(tileType);
 		newButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				selectDesiredTile(toolName, tileType);
+				selectDesiredTile(tileType);
 			}
 		});		
 		return newButton;
 	}
 	
-	private void selectDesiredTile(String toolName, String tileType)
+	private void selectDesiredTile(String tileType)
 	{
 		int num_tools = toolBar.getComponentCount();
 		for (int i = 0; i < num_tools ; i++) {
 			JToggleButton tool = (JToggleButton) toolBar.getComponent(i);
-			if (tool.getText() == toolName) {
+			if (tool.getText() == tileType) {
 				if (tool.isSelected() == true) {
 					mapData.setDesiredTile(tileType);
-					updateStatus("Tile placement mode, type: " + toolName);
+					updateStatus("Tile placement mode, type: " + tileType);
 				}
 				else {
 					mapData.setDesiredTile(null);

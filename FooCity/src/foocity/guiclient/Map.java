@@ -26,10 +26,10 @@ public final class Map implements GridListener {
 	
 	// Size Constants--map grid
 	private final int ICONSIZE = 36;
-	private final int MINI_ICONSIZE = 4;
+	private final int MINI_ICONSIZE = 3;
 
 	// Tile Types
-	private String[] tileLabels = {"BeachTile", "DirtTile", "GrassTile", "ForestTile", "WaterTile", ""};
+	private String[] tileLabels = {"Beach", "Dirt", "Grass", "Forest", "Water", ""};
 	
 	// The tile type we wish to place
 	private String desiredTile = null;
@@ -155,6 +155,7 @@ public final class Map implements GridListener {
 	
 	private ImageIcon getIcon(String tileType)
 	{
+		System.out.println("Tile Type: " + tileType);
 		if (tileIcons.containsKey(tileType))
 			return tileIcons.get(tileType);
 		else
