@@ -20,7 +20,7 @@ public class Tile {
 	}
 
 	public Tile(String type) {
-		TileType newType = TileCollection.getByName(type);
+		TileType newType = TileCollection.instance().getByName(type);
 		if(newType != null) {
 			_type = newType;
 		}

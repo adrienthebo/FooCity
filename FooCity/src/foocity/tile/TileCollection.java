@@ -5,43 +5,115 @@ import foocity.tile.type.*;
 
 
 /**
+ * <p>
  * Collect and reference all tile instances
+ * </p>
  *
- * This class is a singleton instance meant to contain all tile types existing
- * in the system. It also serves to instantiate the basic tile types, and
- * provide a facility for adding new types.
+ * <p>
+ * This class contains a static reference to itself so that there can be a
+ * global point of tile registration. However, for testing purposes standalone
+ * instances can be generated so that subcollections can be used.
+ * </p>
+ *
+ * <p>
+ * The class singleton instance will also instantiate all basic tile types.
+ * </p>
  */
 public class TileCollection {
 	
 	private List<TileType> _types = new ArrayList<TileType>();
-	private static TileCollection _self = new TileCollection();
+	private static TileCollection _self = new TileCollection().instantiateBaseTypes();
 	
-	static public TileType getByName(String name) {
-		for(TileType current : _self._types) {
+	/**
+	 * @return The globally registered class instance
+	 */
+	static public TileCollection instance() {
+		return _self;
+	}
+
+	/**
+	 * <p>
+	 * Search the registered TileTypes for a type with a matching name 
+	 * representation and return it.
+	 * </p>
+	 *
+	 * @param name The TileType to retrieve by name
+	 */
+	public TileType getByName(String name) {
+		for(TileType current : _types) {
 			if(current.getName().equals(name))
 				return current;
 		}
 		return null;
 	}
 	
-	static public TileType getByChar(char symbol){
-		for(TileType current : _self._types) {
+	/**
+	 * <p>
+	 * Search the registered TileTypes for a type with a matching character
+	 * representation and return it.
+	 * </p>
+	 *
+	 * @param symbol The TileType to retrieve, based on the character representation
+	 */
+	public TileType getByChar(char symbol){
+		for(TileType current : _types) {
 			if(current.getSymbol() == symbol)
 				return current;
 		}
 		return null;
 	}
 
+	/**
+	 * <p>
+	 * Add a new TileType to the registered types
+	 * </p>
+	 *
+	 * @param newType the new TileType instance to register.
+	 */
 	public void add(TileType newType) {
 		_types.add(newType);
 	}
 
-	private TileCollection() {
-		instantiateBaseTypes();
+	/**
+	 * <p>
+	 * Remove a TileType with a given name.
+	 * </p>
+	 *
+	 * @param tileName the name of the TileType to delete
+	 * @return True if the tile was found, else false
+	 */
+	public boolean remove(String tileName) {
+		for(int i = 0; i < _types.size(); i++) {
+			if(_types.get(i).getName().equals(tileName)) {
+				_types.remove(i);
+				return true;
+			}
+		}
+		return false;
 	}
-	
-	// This makes me feel like a bad person.
-	private void instantiateBaseTypes() {
+
+	/**
+	 * @return An array of all registered TileType names
+	 */
+	public String[] getNames() {
+		String[] names = new String[_types.size()];
+
+		for(int i = 0; i < _types.size(); i++) {
+			names[i] = _types.get(i).getName();
+		}
+
+		return names;
+	}
+
+	/**
+	 * <p>
+	 * Instantiate all the base TileTypes that come with the application.
+	 * This should only be called by the static instance.
+	 * </p>
+	 *
+	 * @return The instantiated TileCollection - this facilitates operation chaining.
+	 */
+	private TileCollection instantiateBaseTypes() {
 
 		_types.add(BeachTile.newType());
 		_types.add(CoalPowerTile.newType());
@@ -58,5 +130,7 @@ public class TileCollection {
 		_types.add(WaterPlantTile.newType());
 		_types.add(WaterTile.newType());
 		_types.add(WindPowerTile.newType());
+
+		return this;
 	}
 }
