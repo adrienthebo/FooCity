@@ -22,7 +22,7 @@ public final class Map implements GridListener {
 	private Grid grid;
 	
 	// Path Constants--will remove
-	private String TILEPATH = "/home/chchen/git/FooCity/contrib/foo-tiles/16px/";
+	private String TILEPATH = "/home/chchen/git/FooCity/contrib/foo-tiles/36px/";
 	
 	// Size Constants--map grid
 	private final int ICONSIZE = 36;
