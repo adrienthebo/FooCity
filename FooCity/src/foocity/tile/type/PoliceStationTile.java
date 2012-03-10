@@ -2,7 +2,6 @@ package foocity.tile.type;
 
 import java.util.EnumMap;
 
-import foocity.tile.Tile;
 import foocity.tile.TileAttribute;
 import foocity.tile.TileType;
 
