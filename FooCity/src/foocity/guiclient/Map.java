@@ -74,7 +74,7 @@ public final class Map implements GridListener {
 
 	public void updateTile(int row, int col)
 	{
-		ImageIcon icon = getIcon(grid.getTile(row, col));
+		ImageIcon icon = getIcon(grid.getTile(col, row));
 		largeButtons[row][col].setIcon(icon);
 		miniButtons[row][col].setIcon(icon);
 	}

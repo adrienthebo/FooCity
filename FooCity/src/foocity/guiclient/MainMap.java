@@ -4,11 +4,6 @@ import java.awt.EventQueue;
 
 import java.lang.Exception;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -55,10 +50,7 @@ public class MainMap
 	private GameCalendar gameCalendar;
 	private TaxRates taxRates;
 	private GameState gameState;
-	
-	// How we modify the model
-//	private Controller controller;
-	
+		
 	// The main application frame
 	private JFrame frmFoocity;
 	// The Toolbar
@@ -120,93 +112,7 @@ public class MainMap
 		JMenuBar menuBar = new JMenuBar();
 		frmFoocity.setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("Game");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem("New...");
-		mnNewMenu.add(mntmNewMenuItem);
-		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Load...");
-		mnNewMenu.add(mntmNewMenuItem_2);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Save...");
-		mnNewMenu.add(mntmNewMenuItem_1);
-		
-		JSeparator separator = new JSeparator();
-		mnNewMenu.add(separator);
-		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Exit");
-		mntmNewMenuItem_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		mnNewMenu.add(mntmNewMenuItem_3);
-		
-		JMenu mnNewMenu_1 = new JMenu("Change");
-		menuBar.add(mnNewMenu_1);
-		
-		final JCheckBoxMenuItem chckbxmntmNewCheckItem = new JCheckBoxMenuItem("Continuous Time");
-		final JMenuItem mntmNewMenuItem_5 = new JMenuItem("Step Time Forward");
-		
-		chckbxmntmNewCheckItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (chckbxmntmNewCheckItem.getState() == true) {
-					mntmNewMenuItem_5.setEnabled(false);
-				}
-				else {
-					mntmNewMenuItem_5.setEnabled(true);
-				}
-			}
-		});
-
-		mnNewMenu_1.add(chckbxmntmNewCheckItem);
-		mnNewMenu_1.add(mntmNewMenuItem_5);
-		
-		JSeparator separator_1 = new JSeparator();
-		mnNewMenu_1.add(separator_1);
-		
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Tax Rates...");
-		mnNewMenu_1.add(mntmNewMenuItem_4);
-		
-		JMenu mnNewMenu_2 = new JMenu("View");
-		menuBar.add(mnNewMenu_2);
-		
-		final JCheckBoxMenuItem mntmNewMenuItem_6 = new JCheckBoxMenuItem("Reports...");
-		mntmNewMenuItem_6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showReportView(mntmNewMenuItem_6.getState());
-			}
-		});
-		mnNewMenu_2.add(mntmNewMenuItem_6);
-
-		final JCheckBoxMenuItem mntmNewMenuItem_7 = new JCheckBoxMenuItem("Mini Map...");
-		mntmNewMenuItem_7.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showMiniMapView(mntmNewMenuItem_7.getState());
-			}
-		});
-		mnNewMenu_2.add(mntmNewMenuItem_7);
-		
-		JMenu mnNewMenu_3 = new JMenu("Testing");
-		menuBar.add(mnNewMenu_3);
-		
-		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Load Map 1");
-		mntmNewMenuItem_8.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-//				loadMapFile(TERRAINPATH + "001.txt");
-			}
-		});
-		mnNewMenu_3.add(mntmNewMenuItem_8);
-		
-		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Load Map 2");
-		mntmNewMenuItem_9.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-//				loadMapFile(TERRAINPATH + "002.txt");
-			}
-		});
-		mnNewMenu_3.add(mntmNewMenuItem_9);
-		
+		createMenus(menuBar);
 		createToolbar();
 		createMapView();
 		createStatusBar();
@@ -221,6 +127,75 @@ public class MainMap
 		mapData = new Map(HEIGHT, WIDTH);
 	}
 	
+	// Methods to create larger graphical elements
+	private void createMenus(JMenuBar menuBar)
+	{
+		JMenu menuGame = new JMenu("Game");
+		menuBar.add(menuGame);
+		
+		JMenuItem menuGameNew = new JMenuItem("New...");		
+		JMenuItem menuGameLoad = new JMenuItem("Load...");
+		JMenuItem menuGameSave = new JMenuItem("Save...");
+		JSeparator menuGameSeparator = new JSeparator();
+		JMenuItem menuGameExit = new JMenuItem("Exit");
+		
+		menuGameExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		
+		menuGame.add(menuGameNew);
+		menuGame.add(menuGameLoad);
+		menuGame.add(menuGameSave);
+		menuGame.add(menuGameSeparator);
+		menuGame.add(menuGameExit);
+		
+		JMenu menuChange = new JMenu("Change");
+		menuBar.add(menuChange);
+		
+		final JCheckBoxMenuItem menuChangeContinuousTime = new JCheckBoxMenuItem("Continuous Time");
+		final JMenuItem menuChangeStepTimeForward = new JMenuItem("Step Time Forward");
+		JSeparator menuChangeSeparator = new JSeparator();
+		JMenuItem menuChangeTaxRates = new JMenuItem("Tax Rates...");
+		
+		menuChangeContinuousTime.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (menuChangeContinuousTime.getState() == true) {
+					menuChangeStepTimeForward.setEnabled(false);
+				}
+				else {
+					menuChangeStepTimeForward.setEnabled(true);
+				}
+			}
+		});
+				
+		menuChange.add(menuChangeContinuousTime);
+		menuChange.add(menuChangeStepTimeForward);
+		menuChange.add(menuChangeSeparator);
+		menuChange.add(menuChangeTaxRates);
+		
+		JMenu menuView = new JMenu("View");
+		menuBar.add(menuView);
+		
+		final JCheckBoxMenuItem menuViewReports = new JCheckBoxMenuItem("Reports...");
+		menuViewReports.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showReportView(menuViewReports.getState());
+			}
+		});
+		
+		final JCheckBoxMenuItem menuViewMiniMap = new JCheckBoxMenuItem("Mini Map...");
+		menuViewMiniMap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showMiniMapView(menuViewMiniMap.getState());
+			}
+		});
+		
+		menuView.add(menuViewReports);
+		menuView.add(menuViewMiniMap);
+	}
+	
 	private void createToolbar()
 	{
 		toolBar = new JToolBar();
@@ -230,39 +205,7 @@ public class MainMap
 		toolBar.add(createToolButton("Forest"));
 		toolBar.add(createToolButton("Water"));
 	}
-	
-	private JToggleButton createToolButton(final String tileType)
-	{
-		JToggleButton newButton = new JToggleButton(tileType);
-		newButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				selectDesiredTile(tileType);
-			}
-		});		
-		return newButton;
-	}
-	
-	private void selectDesiredTile(String tileType)
-	{
-		int num_tools = toolBar.getComponentCount();
-		for (int i = 0; i < num_tools ; i++) {
-			JToggleButton tool = (JToggleButton) toolBar.getComponent(i);
-			if (tool.getText() == tileType) {
-				if (tool.isSelected() == true) {
-					mapData.setDesiredTile(tileType);
-					updateStatus("Tile placement mode, type: " + tileType);
-				}
-				else {
-					mapData.setDesiredTile(null);
-					updateStatus("Exiting tile placement mode");
-				}
-			}
-			else {
-				tool.setSelected(false);
-			}
-		}
-	}
-	
+		
 	private void createMapView()
 	{
 		JScrollPane mapPane = new JScrollPane();
@@ -286,24 +229,12 @@ public class MainMap
 		miniMapView.pack();
 	}
 	
-	private void showMiniMapView(boolean setting)
-	{
-		if (miniMapView.isVisible() != setting)
-			miniMapView.setVisible(setting);
-	}
-	
 	private void createReportView()
 	{
 		reportView = new JDialog(frmFoocity, false);
 		reportView.setTitle("Reports");
 		reportView.setBounds(100, 100, 450, 300);
 		reportView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-	}
-	
-	private void showReportView(boolean setting)
-	{
-		if (reportView.isVisible() != setting)
-			reportView.setVisible(setting);
 	}
 	
 	private void createStatusBar()
@@ -316,13 +247,58 @@ public class MainMap
 		statusPanel.add(statusBar);
 	}
 	
+	// Methods to create smaller elements (buttons)
+	private JToggleButton createToolButton(final String tileType)
+	{
+		JToggleButton newButton = new JToggleButton(tileType);
+		newButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				toggleDesiredTile(tileType);
+			}
+		});		
+		return newButton;
+	}
+	
+	private void toggleDesiredTile(String tileType)
+	{
+		int num_tools = toolBar.getComponentCount();
+		for (int i = 0; i < num_tools ; i++) {
+			JToggleButton tool = (JToggleButton) toolBar.getComponent(i);
+			if (tool.getText() == tileType) { // This is the button just pressed
+				if (tool.isSelected() == true) { // Button selected?
+					mapData.setDesiredTile(tileType);
+					updateStatus("Tile placement mode, type: " + tileType);
+				}
+				else { // Button was just unselected
+					mapData.setDesiredTile(null);
+					updateStatus("Exiting tile placement mode");
+				}
+			}
+			else { // Unset all other buttons
+				tool.setSelected(false);
+			}
+		}
+	}
+	
+	private void showMiniMapView(boolean setting)
+	{
+		if (miniMapView.isVisible() != setting)
+			miniMapView.setVisible(setting);
+	}
+		
+	private void showReportView(boolean setting)
+	{
+		if (reportView.isVisible() != setting)
+			reportView.setVisible(setting);
+	}
+	
 	private void updateStatus(String newStatus)
 	{
 		statusBar.setText(newStatus);
 	}
 	
-	private void alertUser(String message)
+	private void alertUser(String title, String message)
 	{
-		JOptionPane.showMessageDialog(frmFoocity, message, "Whoops", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(frmFoocity, message, title, JOptionPane.WARNING_MESSAGE);
 	}
 }
