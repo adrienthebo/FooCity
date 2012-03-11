@@ -114,6 +114,23 @@ public class TaxRates implements PropertyChangeGenerator {
 			throw mkException("IncomeTax", tax);
 	}
 
+	/**
+	 * <p>
+	 * Update all tax rates at once.
+	 * </p>
+	 *
+	 * @param propertyTax
+	 * @param salesTax
+	 * @param businessTax
+	 * @param incomeTax
+	 */
+	public void setAll(int propertyTax, int salesTax, int businessTax, int incomeTax) {
+		setPropertyTax(propertyTax);
+		setSalesTax(salesTax);
+		setBusinessTax(businessTax);
+		setIncomeTax(incomeTax);
+	}
+
 	private boolean validateRate(int tax) {
 		return (tax > 0 && tax < 100);
 	}
