@@ -13,6 +13,9 @@ public class GridFixtures {
 			{ '~', 'F',},
 		};
 
+	static public String tinySaveString = "GD\n$I\n~F\n";
+
+
 	static public String[][] smallStringGrid = {
 		{"Grass", "Dirt", "Beach", "Water", "Water",},
 		{"Grass", "Grass", "Dirt", "Beach", "Beach",},
@@ -20,4 +23,5 @@ public class GridFixtures {
 		{"WaterPlant", "PoliceStation", "Park", "Park", "Dirt",},
 		{"Industrial", "Dirt", "Grass", "Forest", "Dirt", },
 	};
+
 }

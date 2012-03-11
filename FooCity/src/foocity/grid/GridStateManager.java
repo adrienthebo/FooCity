@@ -59,6 +59,13 @@ public class GridStateManager {
 	 * <p>
 	 * Read the contents of a file into a 2D array.
 	 * </p>
+	 *
+	 * <p>
+	 * This is directly exposed for testing purposes, and you probably don't
+	 * need to use it.
+	 * </p>
+	 *
+	 * @param reader
 	 */
 	public char[][] loadFromStream(Reader reader) throws IOException {
 
@@ -66,18 +73,37 @@ public class GridStateManager {
 		List<char[]> currentRows = new LinkedList<char[]>();
 
 		while(stream.ready()) {
-			char[] row = stream.readLine().toCharArray();
-			currentRows.add(row);
-			stream.skip(1); // Skip over the newline. XXX Is this necessary?
-		}
-		char[][] rows = (char[][])currentRows.toArray();
+			String line = stream.readLine();
 
+			if(line != null) {
+				//readLine() returns null at the end of the stream
+
+				char[] row = line.toCharArray();
+				currentRows.add(row);
+			}
+			else {
+				// The stream is ready, and also empty.
+				break;
+			}
+		}
+
+		/* Convert linked list of char arrays to a 2D char array.
+		 * Java is not my favorite language.
+		 */
+		char rows[][] = new char[currentRows.size()][];
+		for(int i = 0; i < currentRows.size(); i++) rows[i] = currentRows.get(i);
+		
 		return rows;
 	}
 
 	/**
 	 * <p>
 	 * Performs an in-place update of the game grid.
+	 * </p>
+	 *
+	 * <p>
+	 * This is directly exposed for testing purposes, and you probably don't
+	 * need to use it.
 	 * </p>
 	 *
 	 * @param map The 2D tile
@@ -107,10 +133,6 @@ public class GridStateManager {
 	 * Produces a file representing the current grid state.
 	 * </p>
 	 *
-	 * <p>
-	 * XXX This method only catches and logs errors. Should it just outright
-	 * fail and throw exceptions?
-	 * </p>
 	 *
 	 * @param fileName the path to the game save file.
 	 */
@@ -128,14 +150,28 @@ public class GridStateManager {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Writes the current tile grid to a stream in the save file format
+	 * </p>
+	 *
+	 * <p>
+	 * This is directly exposed for testing purposes, and you probably don't
+	 * need to use it.
+	 * </p>
+	 *
+	 *
+	 * @param fileName the path to the game save file.
+	 */
 	public void writeToStream(Writer writer) throws IOException {
 		BufferedWriter stream = new BufferedWriter(writer);
 
 		char[][] rows = _grid.toCharGrid();
 
 		for(char[] row : rows) {
-			stream.write(row, 0, row.length);
+			stream.write(row);
 			stream.newLine();
 		}
+		stream.flush();
 	}
 }
