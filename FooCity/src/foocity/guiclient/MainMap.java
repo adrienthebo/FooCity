@@ -2,6 +2,7 @@ package foocity.guiclient;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
+import java.io.File;
 import java.lang.Exception;
 
 import javax.swing.JFrame;
@@ -28,14 +29,22 @@ import foocity.state.GameState;
 import foocity.state.TaxRates;
 
 import foocity.grid.Grid;
+import foocity.grid.GridStateManager;
 
 import foocity.tile.TileCollection;
 
+/**
+ * <p>
+ * The Main Application--centered around the large Map view.
+ * Instantiates dialogs, etc, and game state.
+ * The actual Map and Mini Map data lives in a Map object. 
+ * </p>
+ */
 public class MainMap
 {
-	// Path Constants--will remove
-	private String TERRAINPATH = "/home/chchen/git/FooCity/contrib/terrain/";
-
+	// Initial Money
+	private final int STARTING_MONEY = 0;
+	
 	// Size Constants--map grid size
 	private final int WIDTH = 128;
 	private final int HEIGHT = 128;
@@ -56,11 +65,11 @@ public class MainMap
 	private JMenuBar menuBar;
 	// The Toolbar
 	private JToolBar toolBar;
-	// LargeMap Data
+	// Map Data
 	private Map mapData;
-	// The map panel
+	// The main map panel
 	private JPanel mapPanel;
-	// The map panel
+	// The mini map panel
 	private JPanel miniMapPanel;
 	// The status bar at the bottom of the screen
 	private JLabel statusBar;
@@ -80,7 +89,11 @@ public class MainMap
 	private JDialog taxRateView;
 	
 	/**
-	 * Launch the application.
+	 * <p>
+	 * Entry point for the application. From here we create visual elements and instantiate the model objects.
+	 * </p>
+	 *
+	 * @param args
 	 */
 	public static void main(String[] args)
 	{
@@ -101,57 +114,66 @@ public class MainMap
 	}
 
 	/**
-	 * Create the application.
+	 * Class constructor. Creates model objects and populates visual elements.
 	 */
 	public MainMap()
 	{
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize()
-	{
 		initializeModels();
 		
-		frmFoocity = new JFrame();
-		frmFoocity.setTitle("FooCity");
-		frmFoocity.setBounds(100, 100, 450, 300);
-		frmFoocity.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		menuBar = new JMenuBar();
-		frmFoocity.setJMenuBar(menuBar);
-		
-		createFileDialogs();
+		createMainFrame();
+
 		createMenus();
-		createToolbar();
+		createToolBar();
 		createMapView();
 		createStatusBar();
+
+		createFileDialogs();
 		createDialogs();
 		
 		updateStatus("Welcome to FooCity!");
 	}
 	
+	// Create initial Application frame.
+	private void createMainFrame() {
+		frmFoocity = new JFrame();
+		frmFoocity.setTitle("Team 4 FooCity");
+		frmFoocity.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	// Create new, load, and save file chooser dialogs.
 	private void createFileDialogs() {
 		newFileChooser = new JFileChooser();
 		loadFileChooser = new JFileChooser();
 		saveFileChooser = new JFileChooser();
 	}
 
+	/**
+	 * Initialize the model objects. mapData holds the actual map/grid
+	 * representation, grid is passed back for loading, saving, and
+	 * gameCalendar, taxRates, etc, are passed to gameState and
+	 * given to TaxControl and ReportView objects (which populate dialogs).
+	 */
 	private void initializeModels()
 	{
 		mapData = new Map(HEIGHT, WIDTH, ICONSIZE, MINI_ICONSIZE);
+		grid = mapData.getGrid();
+		gameCalendar = new GameCalendar();
+		taxRates = new TaxRates();
+		gameState = new GameState(grid, taxRates, gameCalendar, STARTING_MONEY);
 	}
 	
-	// Methods to create larger graphical elements
+	// Creates menubar, and populates the individual menus.
 	private void createMenus()
 	{
+		menuBar = new JMenuBar();
+		frmFoocity.setJMenuBar(menuBar);
+		
 		createGameMenu();
 		createChangeMenu();
 		createViewMenu();
 	}
 	
+	// The game menu is mostly concerned with game state (loading, etc) and exiting.
 	private void createGameMenu()
 	{
 		JMenu menuGame = new JMenu("Game");
@@ -168,28 +190,31 @@ public class MainMap
 				int newFile = newFileChooser.showOpenDialog(frmFoocity);
 
 				if (newFile == JFileChooser.APPROVE_OPTION) {
-		            mapData.loadMap(newFileChooser.getSelectedFile());
+		            loadFile(newFileChooser.getSelectedFile());
 		        }
 			}
 		});
+		
 		menuGameLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int loadFile = loadFileChooser.showOpenDialog(frmFoocity);
 
 				if (loadFile == JFileChooser.APPROVE_OPTION) {
-		            mapData.loadMap(loadFileChooser.getSelectedFile());
+		            loadFile(loadFileChooser.getSelectedFile());
 		        }
 			}
 		});
+		
 		menuGameSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int saveFile = saveFileChooser.showSaveDialog(frmFoocity);
 
 				if (saveFile == JFileChooser.APPROVE_OPTION) {
-		            mapData.saveMap(saveFileChooser.getSelectedFile());
+		            saveFile(saveFileChooser.getSelectedFile());
 		        }
 			}
 		});
+		
 		menuGameExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -203,6 +228,11 @@ public class MainMap
 		menuGame.add(menuGameExit);
 	}
 	
+	/**
+	 *  The change menu is concerned with modifying other aspects of the
+	 *  game, like tax rates, passage of time, basically anything that isn't
+	 *  strictly grid related.
+	 */
 	private void createChangeMenu()
 	{
 		JMenu menuChange = new JMenu("Change");
@@ -213,6 +243,8 @@ public class MainMap
 		JSeparator menuChangeSeparator = new JSeparator();
 		JMenuItem menuChangeTaxRates = new JMenuItem("Tax Rates...");
 		
+		// Enable or disable the stepTimeForward menu item depending on
+		// the menu item's setting.
 		menuChangeContinuousTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (menuChangeContinuousTime.getState() == true) {
@@ -223,12 +255,12 @@ public class MainMap
 				}
 			}
 		});
+		
 		menuChangeTaxRates.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showView(taxRateView, true);
 			}
 		});
-
 		
 		menuChange.add(menuChangeContinuousTime);
 		menuChange.add(menuChangeStepTimeForward);
@@ -236,6 +268,7 @@ public class MainMap
 		menuChange.add(menuChangeTaxRates);
 	}
 	
+	// The view menu handles the mini map and report views--basically read-only elements.
 	private void createViewMenu()
 	{	
 		JMenu menuView = new JMenu("View");
@@ -259,17 +292,20 @@ public class MainMap
 		menuView.add(menuViewMiniMap);
 	}
 	
-	private void createToolbar()
+	// The toolbar lets the user select tile types for map placement.
+	private void createToolBar()
 	{
 		toolBar = new JToolBar();
 		frmFoocity.getContentPane().add(toolBar, BorderLayout.NORTH);
 		
+		// Get a list of all the tile types from TileCollection
 		String[] tileTypes = TileCollection.instance().getNames();
 				
 		for (int i = 0; i < tileTypes.length ; i++)
 			toolBar.add(createToolButton(tileTypes[i]));
 	}
 		
+	// This creates the scroll pane and panel to hold the main map.
 	private void createMapView()
 	{
 		JScrollPane mapPane = new JScrollPane();
@@ -279,6 +315,7 @@ public class MainMap
 		mapPane.setViewportView(mapPanel);
 	}
 
+	// Here we create and populate the mini, report, and tax rates dialogs.
 	private void createDialogs()
 	{
 		// Mini Map
@@ -306,6 +343,7 @@ public class MainMap
 		taxRateView.pack();
 	}
 	
+	// The status bar is for notifying the user of non-critical events.
 	private void createStatusBar()
 	{
 		JPanel statusPanel = new JPanel();
@@ -316,7 +354,7 @@ public class MainMap
 		statusPanel.add(statusBar);
 	}
 	
-	// Methods to create smaller elements (buttons)
+	// This creates each tool button for the toolbar.
 	private JToggleButton createToolButton(final String tileType)
 	{
 		JToggleButton newButton = new JToggleButton();
@@ -333,6 +371,13 @@ public class MainMap
 		return newButton;
 	}
 	
+	/**
+	 * This is a bass-ackwards way of implementing radio buttons with toggle buttons.
+	 * Basically, this changes what happens when the user selects a map element. If
+	 * none of the toolbar buttons are selected, desiredTile is set to null and the
+	 * click becomes a no-op. If a button is selected, any other buttons are
+	 * unselected and the tileType is now registered as the desiredTile.
+	 */
 	private void toggleDesiredTile(String tileType)
 	{
 		int num_tools = toolBar.getComponentCount();
@@ -354,19 +399,37 @@ public class MainMap
 		}
 	}
 	
+	// Used by menu elements to "make visible" the report, minimap, and taxrates dialogs.
 	private void showView(JDialog view, boolean setting)
 	{
 		if (view.isVisible() != setting)
 			view.setVisible(setting);
 	}
 	
+	// This updates the text in the status bar.
 	private void updateStatus(String newStatus)
 	{
 		statusBar.setText(newStatus);
 	}
 	
+	// This creates a new alert message dialog for critical events.
 	private void alertUser(String title, String message)
 	{
 		JOptionPane.showMessageDialog(frmFoocity, message, title, JOptionPane.WARNING_MESSAGE);
+	}
+	
+	// Loads a requested save game file.
+	private void loadFile(File fileToLoad)
+	{
+		GridStateManager manager = new GridStateManager(grid);
+		if (manager.load(fileToLoad.getAbsolutePath()))
+			mapData.updateMap();
+	}
+	
+	// Saves current game state to a file.
+	private void saveFile(File fileToSave)
+	{
+		GridStateManager manager = new GridStateManager(grid);
+		manager.save(fileToSave.getAbsolutePath());		
 	}
 }
