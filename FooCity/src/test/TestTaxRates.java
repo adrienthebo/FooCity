@@ -3,7 +3,7 @@ package test;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import foocity.TaxRates;
+import foocity.state.TaxRates;
 
 public class TestTaxRates {
 

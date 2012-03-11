@@ -33,10 +33,9 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
 
-import foocity.GameCalendar;
-import foocity.GameState;
-import foocity.StateManager;
-import foocity.TaxRates;
+import foocity.state.GameCalendar;
+import foocity.state.GameState;
+import foocity.state.TaxRates;
 import foocity.grid.Grid;
 import foocity.tile.TileCollection;
 
