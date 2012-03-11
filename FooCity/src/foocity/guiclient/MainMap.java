@@ -2,6 +2,7 @@ package foocity.guiclient;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
+import java.io.File;
 import java.lang.Exception;
 
 
@@ -29,13 +30,15 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+
 
 import foocity.GameCalendar;
 import foocity.GameState;
 import foocity.StateManager;
 import foocity.TaxRates;
 import foocity.grid.Grid;
-import foocity.tile.*;
+import foocity.tile.TileCollection;
 
 public class MainMap
 {
@@ -46,6 +49,10 @@ public class MainMap
 	private final int WIDTH = 128;
 	private final int HEIGHT = 128;
 	
+	// Size Constants--map grid
+	private final int ICONSIZE = 36;
+	private final int MINI_ICONSIZE = 3;
+	
 	// Model Elements
 	private Grid grid;
 	private GameCalendar gameCalendar;
@@ -54,6 +61,8 @@ public class MainMap
 		
 	// The main application frame
 	private JFrame frmFoocity;
+	// The Menu bar
+	private JMenuBar menuBar;
 	// The Toolbar
 	private JToolBar toolBar;
 	// LargeMap Data
@@ -64,11 +73,21 @@ public class MainMap
 	private JPanel miniMapPanel;
 	// The status bar at the bottom of the screen
 	private JLabel statusBar;
-	// The report view window
+	
+	// The New File... Chooser
+	private JFileChooser newFileChooser; 
+	// The Load File... Chooser
+	private JFileChooser loadFileChooser;
+	// The Save File... Chooser
+	private JFileChooser saveFileChooser;
+	
+	// Report view window
 	private JDialog reportView;
-	// The mini map window
+	// Mini map window
 	private JDialog miniMapView;
-
+	// Tax rate window
+	private JDialog taxRateView;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -110,26 +129,39 @@ public class MainMap
 		frmFoocity.setBounds(100, 100, 450, 300);
 		frmFoocity.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		frmFoocity.setJMenuBar(menuBar);
 		
-		createMenus(menuBar);
+		createFileDialogs();
+		createMenus();
 		createToolbar();
 		createMapView();
 		createStatusBar();
-		createReportView();
-		createMiniMapView();
+		createDialogs();
 		
 		updateStatus("Welcome to FooCity!");
 	}
 	
+	private void createFileDialogs() {
+		newFileChooser = new JFileChooser();
+		loadFileChooser = new JFileChooser();
+		saveFileChooser = new JFileChooser();
+	}
+
 	private void initializeModels()
 	{
-		mapData = new Map(HEIGHT, WIDTH);
+		mapData = new Map(HEIGHT, WIDTH, ICONSIZE, MINI_ICONSIZE);
 	}
 	
 	// Methods to create larger graphical elements
-	private void createMenus(JMenuBar menuBar)
+	private void createMenus()
+	{
+		createGameMenu();
+		createChangeMenu();
+		createViewMenu();
+	}
+	
+	private void createGameMenu()
 	{
 		JMenu menuGame = new JMenu("Game");
 		menuBar.add(menuGame);
@@ -139,7 +171,34 @@ public class MainMap
 		JMenuItem menuGameSave = new JMenuItem("Save...");
 		JSeparator menuGameSeparator = new JSeparator();
 		JMenuItem menuGameExit = new JMenuItem("Exit");
-		
+
+		menuGameNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int newFile = newFileChooser.showOpenDialog(frmFoocity);
+
+				if (newFile == JFileChooser.APPROVE_OPTION) {
+		            mapData.loadMap(newFileChooser.getSelectedFile());
+		        }
+			}
+		});
+		menuGameLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int newFile = loadFileChooser.showOpenDialog(frmFoocity);
+
+				if (newFile == JFileChooser.APPROVE_OPTION) {
+		            mapData.loadMap(newFileChooser.getSelectedFile());
+		        }
+			}
+		});
+		menuGameSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int newFile = saveFileChooser.showSaveDialog(frmFoocity);
+
+				if (newFile == JFileChooser.APPROVE_OPTION) {
+		            mapData.saveMap(newFileChooser.getSelectedFile());
+		        }
+			}
+		});
 		menuGameExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -151,7 +210,10 @@ public class MainMap
 		menuGame.add(menuGameSave);
 		menuGame.add(menuGameSeparator);
 		menuGame.add(menuGameExit);
-		
+	}
+	
+	private void createChangeMenu()
+	{
 		JMenu menuChange = new JMenu("Change");
 		menuBar.add(menuChange);
 		
@@ -170,26 +232,35 @@ public class MainMap
 				}
 			}
 		});
-				
+		menuChangeTaxRates.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showView(taxRateView, true);
+			}
+		});
+
+		
 		menuChange.add(menuChangeContinuousTime);
 		menuChange.add(menuChangeStepTimeForward);
 		menuChange.add(menuChangeSeparator);
 		menuChange.add(menuChangeTaxRates);
-		
+	}
+	
+	private void createViewMenu()
+	{	
 		JMenu menuView = new JMenu("View");
 		menuBar.add(menuView);
 		
 		final JCheckBoxMenuItem menuViewReports = new JCheckBoxMenuItem("Reports...");
 		menuViewReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showReportView(menuViewReports.getState());
+				showView(reportView, menuViewReports.getState());
 			}
 		});
 		
 		final JCheckBoxMenuItem menuViewMiniMap = new JCheckBoxMenuItem("Mini Map...");
 		menuViewMiniMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showMiniMapView(menuViewMiniMap.getState());
+				showView(miniMapView, menuViewMiniMap.getState());
 			}
 		});
 		
@@ -203,9 +274,7 @@ public class MainMap
 		frmFoocity.getContentPane().add(toolBar, BorderLayout.NORTH);
 		
 		String[] tileTypes = TileCollection.instance().getNames();
-		
-		System.out.println(tileTypes.length);
-		
+				
 		for (int i = 0; i < tileTypes.length ; i++)
 			toolBar.add(createToolButton(tileTypes[i]));
 	}
@@ -219,8 +288,9 @@ public class MainMap
 		mapPane.setViewportView(mapPanel);
 	}
 
-	private void createMiniMapView()
+	private void createDialogs()
 	{
+		// Mini Map
 		miniMapView = new JDialog(frmFoocity, false);
 		miniMapView.setTitle("Mini Map");
 		miniMapView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -231,14 +301,18 @@ public class MainMap
 		miniMapPanel = mapData.miniMap();
 		mapPane.setViewportView(miniMapPanel);
 		miniMapView.pack();
-	}
-	
-	private void createReportView()
-	{
+
+		// Reports
 		reportView = new JDialog(frmFoocity, false);
 		reportView.setTitle("Reports");
-		reportView.setBounds(100, 100, 450, 300);
 		reportView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		reportView.pack();
+		
+		// Tax Rates
+		taxRateView = new JDialog(frmFoocity, false);
+		taxRateView.setTitle("Tax Rates");
+		taxRateView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);		
+		taxRateView.pack();
 	}
 	
 	private void createStatusBar()
@@ -254,7 +328,12 @@ public class MainMap
 	// Methods to create smaller elements (buttons)
 	private JToggleButton createToolButton(final String tileType)
 	{
-		JToggleButton newButton = new JToggleButton(tileType);
+		JToggleButton newButton = new JToggleButton();
+		newButton.setName(tileType);
+		newButton.setToolTipText(tileType);
+		newButton.setIcon(mapData.getIcon(tileType));
+		newButton.setPreferredSize(new Dimension(ICONSIZE, ICONSIZE));
+
 		newButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				toggleDesiredTile(tileType);
@@ -268,7 +347,7 @@ public class MainMap
 		int num_tools = toolBar.getComponentCount();
 		for (int i = 0; i < num_tools ; i++) {
 			JToggleButton tool = (JToggleButton) toolBar.getComponent(i);
-			if (tool.getText() == tileType) { // This is the button just pressed
+			if (tool.getName() == tileType) { // This is the button just pressed
 				if (tool.isSelected() == true) { // Button selected?
 					mapData.setDesiredTile(tileType);
 					updateStatus("Tile placement mode, type: " + tileType);
@@ -284,16 +363,10 @@ public class MainMap
 		}
 	}
 	
-	private void showMiniMapView(boolean setting)
+	private void showView(JDialog view, boolean setting)
 	{
-		if (miniMapView.isVisible() != setting)
-			miniMapView.setVisible(setting);
-	}
-		
-	private void showReportView(boolean setting)
-	{
-		if (reportView.isVisible() != setting)
-			reportView.setVisible(setting);
+		if (view.isVisible() != setting)
+			view.setVisible(setting);
 	}
 	
 	private void updateStatus(String newStatus)

@@ -13,9 +13,11 @@ import javax.swing.ImageIcon;
 import foocity.grid.Grid;
 import foocity.grid.GridEvent;
 import foocity.grid.GridListener;
+import foocity.grid.GridStateManager;
 
-import foocity.tile.*;
+import foocity.tile.TileCollection;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Hashtable;
 
@@ -23,10 +25,6 @@ import java.util.Hashtable;
 public final class Map implements GridListener {
 	// The Grid Object
 	private Grid grid;
-	
-	// Size Constants--map grid
-	private final int ICONSIZE = 36;
-	private final int MINI_ICONSIZE = 3;
 
 	// The tile type we wish to place
 	private String desiredTile = null;
@@ -48,15 +46,15 @@ public final class Map implements GridListener {
 	// The actual icons displayed to the user (mini view)
 	private JButton[][] miniButtons;	
 	
-	public Map(int height, int width)
+	public Map(int height, int width,  int iconSize, int miniIconSize)
 	{
 		mapHeight = height;
 		mapWidth = width;
 		initializeGrid();
 		loadIcons();
 		createMapElements();
-		initializeMap(largePanel, largeButtons, ICONSIZE, true);
-		initializeMap(miniPanel, miniButtons, MINI_ICONSIZE, false);
+		initializeMap(largePanel, largeButtons, iconSize, true);
+		initializeMap(miniPanel, miniButtons, miniIconSize, false);
 	}
 	
 	public JPanel largeMap()
@@ -139,13 +137,12 @@ public final class Map implements GridListener {
 		return new ImageIcon(this.getClass().getResource(imagePath));
 	}
 	
-	private ImageIcon getIcon(String tileType)
+	public ImageIcon getIcon(String tileType)
 	{
-		System.out.println("Tile Type: " + tileType);
 		if (tileIcons.containsKey(tileType))
 			return tileIcons.get(tileType);
 		else
-			return tileIcons.get("");
+			return tileIcons.get("Water");
 	}
 
 	@Override
@@ -167,5 +164,17 @@ public final class Map implements GridListener {
 	public void setDesiredTile(String desiredTile) {
 		this.desiredTile = desiredTile;
 	}	
+	
+	public void loadMap(File fileToLoad)
+	{
+		GridStateManager manager = new GridStateManager(grid);
+		manager.load(fileToLoad.getAbsolutePath());
+	}
+	
+	public void saveMap(File fileToSave)
+	{
+		GridStateManager manager = new GridStateManager(grid);
+		manager.save(fileToSave.getAbsolutePath());		
+	}
 	
 }
