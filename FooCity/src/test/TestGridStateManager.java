@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.*;
 
+import foocity.checkpoint.GridStateManager;
 import foocity.grid.*;
 import test.fixtures.GridFixtures;
 
