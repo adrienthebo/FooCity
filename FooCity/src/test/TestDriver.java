@@ -20,5 +20,6 @@ import org.junit.runners.Suite;
         TestGridIterator.class,
         TestTaxRates.class,
         TestNeighborSelector.class,
+        TestGridStateManager.class,
 })
 public class TestDriver {}

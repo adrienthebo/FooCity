@@ -16,7 +16,7 @@ public class CommercialTile {
 		attrs.put(TileAttribute.CRIME, 3);
 		attrs.put(TileAttribute.CONSUME_POWER, 35);
 		attrs.put(TileAttribute.CONSUME_WATER, 25);
-		
+
 		return new TileType("Commercial", '$', attrs);
 	}
 }

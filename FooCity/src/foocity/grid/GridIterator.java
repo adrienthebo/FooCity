@@ -8,9 +8,9 @@ import foocity.tile.Tile;
  * GridMemberIterator and munged to strings.
  */
 public class GridIterator implements Iterator<String> {
-	
+
 	Iterator<Tile> _iter;
-	
+
 	public GridIterator(Grid grid) {
 		_iter = new GridMemberIterator(grid);
 	}

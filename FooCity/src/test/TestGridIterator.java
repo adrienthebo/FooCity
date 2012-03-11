@@ -12,16 +12,16 @@ import org.junit.Test;
 import foocity.grid.Grid;
 
 public class TestGridIterator {
-	
+
 	private Grid _grid;
 	private Iterator<String> _subject;
-	
+
 	@Before
 	public void instantiate() {
-		_grid = new Grid(GridFixtures.tinyGrid);
+		_grid = new Grid(GridFixtures.tinyStringGrid);
 		_subject = _grid.getIterator();
 	}
-	
+
 	@Test
 	public void testIteration() {
 		assertEquals("Grass", _subject.next());
@@ -32,7 +32,7 @@ public class TestGridIterator {
 		assertEquals("Forest", _subject.next());
 		assertFalse(_subject.hasNext());
 	}
-	
+
 	@Test(expected = UnsupportedOperationException.class)
 	public void testRemove() {
 		_subject.remove();

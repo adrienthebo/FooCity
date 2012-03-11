@@ -5,7 +5,7 @@ import foocity.tile.TileAttribute;
 import java.util.*;
 
 public class WaterPlantTile {
-	
+
 	public static TileType newType() {
 		EnumMap<TileAttribute, Integer> attrs = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
 		attrs.put(TileAttribute.PRICE, 1000);
@@ -14,7 +14,7 @@ public class WaterPlantTile {
 		attrs.put(TileAttribute.CRIME, 2);
 		attrs.put(TileAttribute.CONSUME_POWER, 35);
 		attrs.put(TileAttribute.PRODUCE_WATER, 2500);
-		
+
 		return new TileType("WaterPlant", 'W', attrs);
 	}
 }

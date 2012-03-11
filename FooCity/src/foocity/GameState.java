@@ -3,14 +3,27 @@ package foocity;
 import foocity.grid.Grid;
 
 /**
- * The GameState class is an aggregation of the different state components of a
- * specific game.
+ * <p>
+ * Representation of a particular game state.
+ * </p>
+ *
+ * <p>
+ * This class forms a representation of a specific game. All members should be
+ * either persistent while this game is active, or ensure that objects hand off
+ * event listeners so that state swap out is transparent and listening classes
+ * do not need to be aware of such a state change.
+ * </p>
+ *
+ * <p>
+ * However, this requirement raises the issue of how components will be
+ * notified of a full state change.
+ * </p>
  */
 public class GameState {
 	protected Grid _grid;
 	protected TaxRates _taxes;
 	protected GameCalendar _calendar;
-	
+
 	protected int _funds;
 	/*
 	 * XXX I'm not sure if funds should be a separate class; it might make
@@ -18,26 +31,26 @@ public class GameState {
 	 * into a different class. It would also make adding a listener for funds
 	 * simpler. On the other hand, it's just a ****ing integer.
 	 */
-	
+
 	public GameState(Grid newGrid, TaxRates newTaxRates, GameCalendar newGameCalendar, int newFunds) {
 		_grid = newGrid;
 		_taxes = newTaxRates;
 		_calendar = newGameCalendar;
 		_funds = newFunds;
 	}
-	
+
 	public Grid getGrid() {
 		return _grid;
 	}
-	
+
 	public TaxRates getTaxRates() {
 		return _taxes;
 	}
-	
+
 	public GameCalendar getCalendar() {
 		return _calendar;
 	}
-	
+
 	public int getFunds() {
 		return _funds;
 	}

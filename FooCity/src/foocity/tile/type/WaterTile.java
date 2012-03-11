@@ -9,7 +9,7 @@ public class WaterTile {
 		EnumMap<TileAttribute, Integer> attrs = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
 		attrs.put(TileAttribute.PRICE, 0); // XXX This has major concerns for purchasing.
 		attrs.put(TileAttribute.HAPPINESS, 10);
-		
+
 		return new TileType("Water", '~', attrs);
 	}
 }

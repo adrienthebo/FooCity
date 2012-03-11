@@ -11,7 +11,7 @@ public class WindPowerTile {
 		attrs.put(TileAttribute.HAPPINESS, -3);
 		attrs.put(TileAttribute.JOBS, 20);
 		attrs.put(TileAttribute.PRODUCE_POWER, 1000);
-		
+
 		return new TileType("WindPower", 'X', attrs);
 	}
 }

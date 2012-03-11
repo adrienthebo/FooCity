@@ -29,6 +29,6 @@ public class TestTileCollection {
 		String[] names = TileCollection.instance().getNames();
 		String[] expected = TileTypes.defaultTypes;
 
-		assertEquals(expected, names);
+		assertArrayEquals(expected, names);
 	}
 }

@@ -12,7 +12,7 @@ public class SolarPowerTile {
 		attrs.put(TileAttribute.HAPPINESS, -2);
 		attrs.put(TileAttribute.JOBS, 10);
 		attrs.put(TileAttribute.PRODUCE_POWER, 1000);
-		
+
 		return new TileType("SolarPower", 'S', attrs);
 	}
 }

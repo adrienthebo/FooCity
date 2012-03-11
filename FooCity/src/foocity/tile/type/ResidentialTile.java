@@ -14,7 +14,7 @@ public class ResidentialTile {
 		attrs.put(TileAttribute.CRIME, 1);
 		attrs.put(TileAttribute.CONSUME_POWER, 30);
 		attrs.put(TileAttribute.CONSUME_WATER, 15);
-		
+
 		return new TileType("Residential", 'R', attrs);
 	}
 }

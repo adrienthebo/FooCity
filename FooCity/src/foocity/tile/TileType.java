@@ -11,11 +11,11 @@ import java.util.Map;
  *
  */
 public class TileType {
-	
+
 	protected String _name;
 	protected char _symbol;
 	protected Map<TileAttribute, Integer> _attributes = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
-	
+
 	public TileType(String name, char symbol, Map<TileAttribute, Integer> attributes) {
 		_name = new String(name); //Deep copy of name
 		_symbol = symbol;
@@ -25,11 +25,11 @@ public class TileType {
 	public String getName() {
 		return _name; // XXX Should this be a deep copy?
 	}
-	
+
 	public char getSymbol() {
 		return _symbol;
 	}
-	
+
 	public int getAttribute(TileAttribute attr) {
 		Integer val = _attributes.get(attr);
 		if(val == null) {
