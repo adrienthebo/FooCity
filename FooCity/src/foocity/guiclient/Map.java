@@ -73,6 +73,13 @@ public final class Map implements GridListener {
 		largeButtons[row][col].setIcon(icon);
 		miniButtons[row][col].setIcon(icon);
 	}
+
+	public void updateMap()
+	{
+		for (int row = 0; row < mapHeight ; row++)
+			for (int col = 0; col < mapWidth ; col++)
+				updateTile(row, col);
+	}
 	
 	private void createMapElements()
 	{
@@ -168,7 +175,8 @@ public final class Map implements GridListener {
 	public void loadMap(File fileToLoad)
 	{
 		GridStateManager manager = new GridStateManager(grid);
-		manager.load(fileToLoad.getAbsolutePath());
+		if (manager.load(fileToLoad.getAbsolutePath()))
+			updateMap();
 	}
 	
 	public void saveMap(File fileToSave)

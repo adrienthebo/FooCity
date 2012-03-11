@@ -183,19 +183,19 @@ public class MainMap
 		});
 		menuGameLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int newFile = loadFileChooser.showOpenDialog(frmFoocity);
+				int loadFile = loadFileChooser.showOpenDialog(frmFoocity);
 
-				if (newFile == JFileChooser.APPROVE_OPTION) {
-		            mapData.loadMap(newFileChooser.getSelectedFile());
+				if (loadFile == JFileChooser.APPROVE_OPTION) {
+		            mapData.loadMap(loadFileChooser.getSelectedFile());
 		        }
 			}
 		});
 		menuGameSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int newFile = saveFileChooser.showSaveDialog(frmFoocity);
+				int saveFile = saveFileChooser.showSaveDialog(frmFoocity);
 
-				if (newFile == JFileChooser.APPROVE_OPTION) {
-		            mapData.saveMap(newFileChooser.getSelectedFile());
+				if (saveFile == JFileChooser.APPROVE_OPTION) {
+		            mapData.saveMap(saveFileChooser.getSelectedFile());
 		        }
 			}
 		});
