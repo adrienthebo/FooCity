@@ -35,6 +35,7 @@ import foocity.GameState;
 import foocity.StateManager;
 import foocity.TaxRates;
 import foocity.grid.Grid;
+import foocity.tile.*;
 
 public class MainMap
 {
@@ -201,9 +202,12 @@ public class MainMap
 		toolBar = new JToolBar();
 		frmFoocity.getContentPane().add(toolBar, BorderLayout.NORTH);
 		
-		toolBar.add(createToolButton("Dirt"));
-		toolBar.add(createToolButton("Forest"));
-		toolBar.add(createToolButton("Water"));
+		String[] tileTypes = TileCollection.instance().getNames();
+		
+		System.out.println(tileTypes.length);
+		
+		for (int i = 0; i < tileTypes.length ; i++)
+			toolBar.add(createToolButton(tileTypes[i]));
 	}
 		
 	private void createMapView()
