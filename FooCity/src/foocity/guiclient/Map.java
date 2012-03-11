@@ -18,7 +18,6 @@ import foocity.grid.GridStateManager;
 import foocity.tile.TileCollection;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Hashtable;
 
 
@@ -81,6 +80,48 @@ public final class Map implements GridListener {
 				updateTile(row, col);
 	}
 	
+	public ImageIcon getIcon(String tileType)
+	{
+		if (tileIcons.containsKey(tileType))
+			return tileIcons.get(tileType);
+		else
+			return tileIcons.get("Water");
+	}
+
+	@Override
+	public void gridUpdated(GridEvent e) {
+		updateTile(e.getYAxis(), e.getXAxis());
+	}
+	
+	public void placeTile(int row, int col)
+	{
+		String tileType = getDesiredTile();
+		if (tileType != null)
+			grid.setTile(col, row, tileType);
+	}
+
+	public String getDesiredTile() {
+		return desiredTile;
+	}
+
+	public void setDesiredTile(String desiredTile) {
+		this.desiredTile = desiredTile;
+	}	
+	
+	public void loadMap(File fileToLoad)
+	{
+		GridStateManager manager = new GridStateManager(grid);
+		if (manager.load(fileToLoad.getAbsolutePath()))
+			updateMap();
+	}
+	
+	public void saveMap(File fileToSave)
+	{
+		GridStateManager manager = new GridStateManager(grid);
+		manager.save(fileToSave.getAbsolutePath());		
+	}
+	
+	// NOW WE GO PRIVATE
 	private void createMapElements()
 	{
 		largePanel = new JPanel();
@@ -142,47 +183,6 @@ public final class Map implements GridListener {
 	{
 		String imagePath = "tile_images/" + tileType + ".png";
 		return new ImageIcon(this.getClass().getResource(imagePath));
-	}
-	
-	public ImageIcon getIcon(String tileType)
-	{
-		if (tileIcons.containsKey(tileType))
-			return tileIcons.get(tileType);
-		else
-			return tileIcons.get("Water");
-	}
-
-	@Override
-	public void gridUpdated(GridEvent e) {
-		updateTile(e.getYAxis(), e.getXAxis());
-	}
-	
-	public void placeTile(int row, int col)
-	{
-		String tileType = getDesiredTile();
-		if (tileType != null)
-			grid.setTile(col, row, tileType);
-	}
-
-	public String getDesiredTile() {
-		return desiredTile;
-	}
-
-	public void setDesiredTile(String desiredTile) {
-		this.desiredTile = desiredTile;
-	}	
-	
-	public void loadMap(File fileToLoad)
-	{
-		GridStateManager manager = new GridStateManager(grid);
-		if (manager.load(fileToLoad.getAbsolutePath()))
-			updateMap();
-	}
-	
-	public void saveMap(File fileToSave)
-	{
-		GridStateManager manager = new GridStateManager(grid);
-		manager.save(fileToSave.getAbsolutePath());		
 	}
 	
 }

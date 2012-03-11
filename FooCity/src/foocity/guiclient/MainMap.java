@@ -2,9 +2,7 @@ package foocity.guiclient;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
-import java.io.File;
 import java.lang.Exception;
-
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -13,30 +11,24 @@ import java.awt.BorderLayout;
 import javax.swing.JToggleButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
-import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
-
 import foocity.state.GameCalendar;
 import foocity.state.GameState;
 import foocity.state.TaxRates;
+
 import foocity.grid.Grid;
+
 import foocity.tile.TileCollection;
 
 public class MainMap
