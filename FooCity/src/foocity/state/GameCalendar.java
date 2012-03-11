@@ -50,6 +50,19 @@ public class GameCalendar implements PropertyChangeGenerator {
 		EventGenerator.firePropertyChangeEvent(this, _listeners, "Calendar", oldCalendar, newCalendar);
 	}
 
+	/**
+	 * <p>
+	 * Sets the date to a specific time.
+	 * </p>
+	 *
+	 * @param newCalendar The calendar representing the new date.
+	 */
+	public void set(Calendar newCalendar) {
+		Object oldCalendar = _calendar.clone();
+		_calendar = newCalendar;
+		EventGenerator.firePropertyChangeEvent(this, _listeners, "Calendar", oldCalendar, newCalendar);
+	}
+
 	@Override
 	public String toString() {
 		return _calendar.toString();
