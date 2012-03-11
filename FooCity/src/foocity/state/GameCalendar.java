@@ -1,7 +1,8 @@
-package foocity;
+package foocity.state;
 
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.event.EventListenerList;
 
@@ -14,6 +15,10 @@ public class GameCalendar implements PropertyChangeGenerator {
 
 	private EventListenerList _listeners = new EventListenerList();
 	private Calendar _calendar;
+
+	public GameCalendar() {
+		_calendar = new GregorianCalendar();
+	}
 
 	public GameCalendar(Calendar newCalendar) {
 		_calendar = newCalendar;

@@ -1,4 +1,4 @@
-package foocity;
+package foocity.state;
 
 import foocity.grid.Grid;
 
