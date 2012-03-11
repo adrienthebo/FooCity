@@ -14,6 +14,9 @@ import foocity.grid.Grid;
 import foocity.grid.GridEvent;
 import foocity.grid.GridListener;
 
+import foocity.tile.*;
+
+import java.net.URL;
 import java.util.Hashtable;
 
 
@@ -21,16 +24,10 @@ public final class Map implements GridListener {
 	// The Grid Object
 	private Grid grid;
 	
-	// Path Constants--will remove
-	private String TILEPATH = "/home/chchen/git/FooCity/contrib/foo-tiles/36px/";
-	
 	// Size Constants--map grid
 	private final int ICONSIZE = 36;
 	private final int MINI_ICONSIZE = 3;
 
-	// Tile Types
-	private String[] tileLabels = {"Beach", "Dirt", "Grass", "Forest", "Water", ""};
-	
 	// The tile type we wish to place
 	private String desiredTile = null;
 	
@@ -125,32 +122,21 @@ public final class Map implements GridListener {
 	
 	private void loadIcons()
 	{
+		String[] tileTypes = TileCollection.instance().getNames();
+		
 		tileIcons = new Hashtable<String, ImageIcon>();
-		for (int i = 0; i < tileLabels.length; i++)
+		
+		for (int i = 0; i < tileTypes.length; i++)
 		{
-			String key = tileLabels[i];
+			String key = tileTypes[i];
 			tileIcons.put(key, loadImage(key));
 		}
 	}
 	
 	private ImageIcon loadImage(String tileType)
 	{
-		String tileFile;
-		
-		if (tileType == "Beach")
-			tileFile = "beach.png";
-		else if (tileType == "Dirt")
-			tileFile = "dirt.png";
-		else if (tileType == "Grass")
-			tileFile = "grass.png";
-		else if (tileType == "Forest")
-			tileFile = "tree.png";
-		else if (tileType == "Water")
-			tileFile = "water.png";
-		else
-			tileFile = "dirt.png";
-		
-		return new ImageIcon(TILEPATH + tileFile);
+		String imagePath = "tile_images/" + tileType + ".png";
+		return new ImageIcon(this.getClass().getResource(imagePath));
 	}
 	
 	private ImageIcon getIcon(String tileType)
