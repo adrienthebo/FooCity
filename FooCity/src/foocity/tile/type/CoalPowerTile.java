@@ -16,7 +16,7 @@ public class CoalPowerTile {
 		attrs.put(TileAttribute.PRODUCE_POWER, 5000);
 		attrs.put(TileAttribute.CONSUME_WATER, 25);
 
-		return new TileType("CoalPower", 'S', attrs);
+		return new TileType("CoalPower", 'C', attrs);
 	}
 
 }

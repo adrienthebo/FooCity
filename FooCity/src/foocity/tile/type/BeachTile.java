@@ -10,6 +10,6 @@ public class BeachTile {
 		EnumMap<TileAttribute, Integer> attrs = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
 		attrs.put(TileAttribute.HAPPINESS, 8);
 
-		return new TileType("Beach", 'b', attrs);
+		return new TileType("Beach", 'B', attrs);
 	}
 }

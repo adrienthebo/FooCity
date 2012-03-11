@@ -13,6 +13,6 @@ public class ForestTile {
 		attrs.put(TileAttribute.HAPPINESS, 4);
 		attrs.put(TileAttribute.POLLUTION, -5);
 
-		return new TileType("Forest", 'F', attrs);
+		return new TileType("Forest", 'T', attrs);
 	}
 }

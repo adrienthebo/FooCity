@@ -15,6 +15,6 @@ public class WaterPlantTile {
 		attrs.put(TileAttribute.CONSUME_POWER, 35);
 		attrs.put(TileAttribute.PRODUCE_WATER, 2500);
 
-		return new TileType("WaterPlant", 'W', attrs);
+		return new TileType("WaterPlant", '~', attrs);
 	}
 }

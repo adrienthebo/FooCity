@@ -10,6 +10,6 @@ public class WaterTile {
 		attrs.put(TileAttribute.PRICE, 0); // XXX This has major concerns for purchasing.
 		attrs.put(TileAttribute.HAPPINESS, 10);
 
-		return new TileType("Water", '~', attrs);
+		return new TileType("Water", 'W', attrs);
 	}
 }
