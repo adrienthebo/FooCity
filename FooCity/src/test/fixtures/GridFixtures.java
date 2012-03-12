@@ -10,10 +10,10 @@ public class GridFixtures {
 	static public char[][] tinyCharGrid = {
 			{ 'G', 'D',},
 			{ '$', 'I',},
-			{ '~', 'F',},
+			{ 'W', 'T',},
 		};
 
-	static public String tinySaveString = "GD\n$I\n~F\n";
+	static public String tinySaveString = "GD\n$I\nWT\n";
 
 
 	static public String[][] smallStringGrid = {

@@ -33,12 +33,7 @@ public class Manager {
 	public void load(String checkpointFile) {
 		try {
 			Reader f = new FileReader(checkpointFile);
-			String[][] lines = parseStream(f);
-			for(String[] tokens : lines) {
-				if(tokens[0].equals("grid")) loadGrid(tokens);
-				else if(tokens[0].equals("gamecalendar")) loadGrid(tokens);
-				else if(tokens[0].equals("funds")) loadFunds(tokens);
-			}
+			populate(f);
 		}
 		catch(FileNotFoundException e) {
 			System.err.println("Unable to load checkpoint file " + checkpointFile + ": " + e);
@@ -48,6 +43,16 @@ public class Manager {
 			System.err.println("Error while loading " + checkpointFile + ": " + e);
 			e.printStackTrace();
 		}
+	}
+
+	public void populate(Reader r) throws IOException {
+			String[][] lines = parseStream(r);
+			for(String[] tokens : lines) {
+				if(tokens[0].equals("grid")) loadGrid(tokens);
+				else if(tokens[0].equals("gamecalendar")) loadGameCalendar(tokens);
+				else if(tokens[0].equals("funds")) loadFunds(tokens);
+				else if(tokens[0].equals("taxes")) loadTaxes(tokens);
+			}
 	}
 
 	private void loadGrid(String[] tokens) {
