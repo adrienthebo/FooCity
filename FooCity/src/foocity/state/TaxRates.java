@@ -80,8 +80,8 @@ public class TaxRates implements PropertyChangeGenerator {
 
 	public void setPropertyTax(int tax) {
 		if(validateRate(tax)) {
-			EventGenerator.firePropertyChangeEvent(this, _listeners, "PropertyTax", _propertyTax, tax);
 			_propertyTax = tax;
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "PropertyTax", _propertyTax, tax);
 		}
 		else
 			throw mkException("PropertyTax", tax);
@@ -89,8 +89,8 @@ public class TaxRates implements PropertyChangeGenerator {
 
 	public void setSalesTax(int tax) {
 		if(validateRate(tax)) {
-			EventGenerator.firePropertyChangeEvent(this, _listeners, "SalesTax", _salesTax, tax);
 			_salesTax = tax;
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "SalesTax", _salesTax, tax);
 		}
 		else
 			throw mkException("SalesTax", tax);
@@ -98,8 +98,8 @@ public class TaxRates implements PropertyChangeGenerator {
 
 	public void setBusinessTax(int tax) {
 		if(validateRate(tax)) {
-			EventGenerator.firePropertyChangeEvent(this, _listeners, "BusinessTax", _businessTax, tax);
 			_businessTax = tax;
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "BusinessTax", _businessTax, tax);
 		}
 		else
 			throw mkException("BusinessTax", tax);
@@ -107,8 +107,8 @@ public class TaxRates implements PropertyChangeGenerator {
 
 	public void setIncomeTax(int tax) {
 		if(validateRate(tax)) {
-			EventGenerator.firePropertyChangeEvent(this, _listeners, "IncomeTax", _incomeTax, tax);
 			_incomeTax = tax;
+			EventGenerator.firePropertyChangeEvent(this, _listeners, "IncomeTax", _incomeTax, tax);
 		}
 		else
 			throw mkException("IncomeTax", tax);
@@ -132,7 +132,7 @@ public class TaxRates implements PropertyChangeGenerator {
 	}
 
 	private boolean validateRate(int tax) {
-		return (tax > 0 && tax < 100);
+		return (tax >= 0 && tax <= 100);
 	}
 
 	@Override
