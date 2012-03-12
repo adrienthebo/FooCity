@@ -65,12 +65,10 @@ public class MainMap
 	private JMenuBar menuBar;
 	// The Toolbar
 	private JToolBar toolBar;
-	// Map Data
-	private Map mapData;
-	// The main map panel
-	private JPanel mapPanel;
-	// The mini map panel
-	private JPanel miniMapPanel;
+	// Map Control
+	private Map mapControl;
+	// Tax Control
+	private TaxControl taxControl;
 	// The status bar at the bottom of the screen
 	private JLabel statusBar;
 	
@@ -86,7 +84,7 @@ public class MainMap
 	// Mini map window
 	private JDialog miniMapView;
 	// Tax rate window
-	private JDialog taxRateView;
+	private JDialog taxView;
 	
 	/**
 	 * <p>
@@ -155,10 +153,13 @@ public class MainMap
 	 */
 	private void initializeModels()
 	{
-		mapData = new Map(HEIGHT, WIDTH, ICONSIZE, MINI_ICONSIZE);
-		grid = mapData.getGrid();
+		mapControl = new Map(HEIGHT, WIDTH, ICONSIZE, MINI_ICONSIZE);
+		taxControl = new TaxControl();
 		gameCalendar = new GameCalendar();
-		taxRates = new TaxRates();
+
+		grid = mapControl.getGrid();
+		taxRates = taxControl.getTaxRates();
+				
 		gameState = new GameState(grid, taxRates, gameCalendar, STARTING_MONEY);
 	}
 	
@@ -241,7 +242,8 @@ public class MainMap
 		final JCheckBoxMenuItem menuChangeContinuousTime = new JCheckBoxMenuItem("Continuous Time");
 		final JMenuItem menuChangeStepTimeForward = new JMenuItem("Step Time Forward");
 		JSeparator menuChangeSeparator = new JSeparator();
-		JMenuItem menuChangeTaxRates = new JMenuItem("Tax Rates...");
+		final JCheckBoxMenuItem menuChangeTaxRates = new JCheckBoxMenuItem("TaxRates");
+
 		
 		// Enable or disable the stepTimeForward menu item depending on
 		// the menu item's setting.
@@ -258,7 +260,7 @@ public class MainMap
 		
 		menuChangeTaxRates.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showView(taxRateView, true);
+				showView(taxView, menuChangeTaxRates.getState());
 			}
 		});
 		
@@ -275,13 +277,14 @@ public class MainMap
 		menuBar.add(menuView);
 		
 		final JCheckBoxMenuItem menuViewReports = new JCheckBoxMenuItem("Reports...");
+		final JCheckBoxMenuItem menuViewMiniMap = new JCheckBoxMenuItem("Mini Map...");
+
 		menuViewReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showView(reportView, menuViewReports.getState());
 			}
 		});
 		
-		final JCheckBoxMenuItem menuViewMiniMap = new JCheckBoxMenuItem("Mini Map...");
 		menuViewMiniMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showView(miniMapView, menuViewMiniMap.getState());
@@ -311,7 +314,7 @@ public class MainMap
 		JScrollPane mapPane = new JScrollPane();
 		frmFoocity.getContentPane().add(mapPane, BorderLayout.CENTER);
 		
-		mapPanel = mapData.largeMap();
+		JPanel mapPanel = mapControl.largeMap();
 		mapPane.setViewportView(mapPanel);
 	}
 
@@ -326,7 +329,7 @@ public class MainMap
 		JScrollPane mapPane = new JScrollPane();
 		miniMapView.getContentPane().add(mapPane, BorderLayout.CENTER);
 		
-		miniMapPanel = mapData.miniMap();
+		JPanel miniMapPanel = mapControl.miniMap();
 		mapPane.setViewportView(miniMapPanel);
 		miniMapView.pack();
 
@@ -337,10 +340,16 @@ public class MainMap
 		reportView.pack();
 		
 		// Tax Rates
-		taxRateView = new JDialog(frmFoocity, false);
-		taxRateView.setTitle("Tax Rates");
-		taxRateView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);		
-		taxRateView.pack();
+		taxView = new JDialog(frmFoocity, false);
+		taxView.setTitle("Tax Rates");
+		taxView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);		
+
+		JScrollPane taxPane = new JScrollPane();
+		taxView.getContentPane().add(taxPane, BorderLayout.CENTER);
+		
+		JPanel taxPanel = taxControl.getTaxPanel();
+		taxPane.setViewportView(taxPanel);
+		taxView.pack();
 	}
 	
 	// The status bar is for notifying the user of non-critical events.
@@ -360,7 +369,7 @@ public class MainMap
 		JToggleButton newButton = new JToggleButton();
 		newButton.setName(tileType);
 		newButton.setToolTipText(tileType);
-		newButton.setIcon(mapData.getIcon(tileType));
+		newButton.setIcon(mapControl.getIcon(tileType));
 		newButton.setPreferredSize(new Dimension(ICONSIZE, ICONSIZE));
 
 		newButton.addActionListener(new ActionListener() {
@@ -385,11 +394,11 @@ public class MainMap
 			JToggleButton tool = (JToggleButton) toolBar.getComponent(i);
 			if (tool.getName() == tileType) { // This is the button just pressed
 				if (tool.isSelected() == true) { // Button selected?
-					mapData.setDesiredTile(tileType);
+					mapControl.setDesiredTile(tileType);
 					updateStatus("Tile placement mode, type: " + tileType);
 				}
 				else { // Button was just unselected
-					mapData.setDesiredTile(null);
+					mapControl.setDesiredTile(null);
 					updateStatus("Exiting tile placement mode");
 				}
 			}
@@ -423,7 +432,7 @@ public class MainMap
 	{
 		GridStateManager manager = new GridStateManager(grid);
 		if (manager.load(fileToLoad.getAbsolutePath()))
-			mapData.updateMap();
+			mapControl.updateMap();
 	}
 	
 	// Saves current game state to a file.
