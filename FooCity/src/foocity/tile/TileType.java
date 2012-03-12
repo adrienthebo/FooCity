@@ -5,10 +5,14 @@ import java.util.Map;
 
 
 /**
- * Holds the characteristics of a generic tile type. These are immutable values
- * meant to define the characteristics that a tile type produces, and not the
- * current state of a tile.
+ * <p>
+ * Holds the characteristics of a generic tile type.
+ * </p>
  *
+ * <p>
+ * These are immutable values meant to define the characteristics that a tile
+ * type produces, and not the current state of a tile.
+ * </p>
  */
 public class TileType {
 
@@ -17,13 +21,13 @@ public class TileType {
 	protected Map<TileAttribute, Integer> _attributes = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
 
 	public TileType(String name, char symbol, Map<TileAttribute, Integer> attributes) {
-		_name = new String(name); //Deep copy of name
+		_name = name;
 		_symbol = symbol;
 		_attributes = attributes;
 	}
 
 	public String getName() {
-		return _name; // XXX Should this be a deep copy?
+		return _name;
 	}
 
 	public char getSymbol() {
