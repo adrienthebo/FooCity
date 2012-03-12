@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 
 import foocity.state.*;
-import foocity.grid.Grid;
 /**
  * <p>
  * This class provides a general purpose adapter for loading and saving games.
