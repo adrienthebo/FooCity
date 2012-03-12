@@ -122,7 +122,7 @@ public class GridStateManager {
 		int newYSize = map[0].length;
 
 		if(newXSize != _grid.getXSize() || newYSize != _grid.getYSize()) {
-			throw new IllegalArgumentException("Tried to load grid from array with mismatched size");
+			throw new IllegalArgumentException("Tried to load grid from array with mismatched size, expected " + _grid.getXSize() + ", " + _grid.getYSize() + ", got " + newXSize + ", " + newYSize);
 		}
 
 
