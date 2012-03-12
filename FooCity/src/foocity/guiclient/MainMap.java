@@ -213,7 +213,9 @@ public class MainMap implements PropertyChangeListener
 		JMenuItem menuGameNew = new JMenuItem("New...");		
 		JMenuItem menuGameLoad = new JMenuItem("Load...");
 		JMenuItem menuGameSave = new JMenuItem("Save...");
-		JSeparator menuGameSeparator = new JSeparator();
+		JSeparator menuGameSeparatorA = new JSeparator();
+		JMenuItem menuGameAbout = new JMenuItem("About...");
+		JSeparator menuGameSeparatorB = new JSeparator();
 		JMenuItem menuGameExit = new JMenuItem("Exit");
 
 		menuGameNew.addActionListener(new ActionListener() {
@@ -245,6 +247,12 @@ public class MainMap implements PropertyChangeListener
 		        }
 			}
 		});
+
+		menuGameAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				notifyUser("About FooCity", "CS300 Team 4 FooCity\nThebo / Chen\nWinter 2012");
+			}
+		});
 		
 		menuGameExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -255,7 +263,9 @@ public class MainMap implements PropertyChangeListener
 		menuGame.add(menuGameNew);
 		menuGame.add(menuGameLoad);
 		menuGame.add(menuGameSave);
-		menuGame.add(menuGameSeparator);
+		menuGame.add(menuGameSeparatorA);
+		menuGame.add(menuGameAbout);
+		menuGame.add(menuGameSeparatorB);
 		menuGame.add(menuGameExit);
 	}
 	
@@ -473,6 +483,12 @@ public class MainMap implements PropertyChangeListener
 	private void alertUser(String title, String message)
 	{
 		JOptionPane.showMessageDialog(frmFoocity, message, title, JOptionPane.WARNING_MESSAGE);
+	}
+
+	// This creates a new notification message dialog for semi-critical events.
+	private void notifyUser(String title, String message)
+	{
+		JOptionPane.showMessageDialog(frmFoocity, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	// Loads a requested save game file.
