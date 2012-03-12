@@ -269,4 +269,30 @@ public class Grid {
 
 		return newGrid;
 	}
+
+	/**
+	 * <p>
+	 * Calculate the current grid state.
+	 * </p>
+	 *
+	 * <p>
+	 * This method iterates over the grid, extracts the neighbors for each tile,
+	 * and then passes the tile calculation to the Tile's TileState member.
+	 * </p>
+	 */
+	public void calculate() {
+		GridMemberIterator iter = new GridMemberIterator(this);
+
+		while(iter.hasNext()) {
+			Tile current = iter.next();
+			Tile[] neighbors = NeighborSelector.get(this, 
+				iter.currentXAxis(),
+				iter.currentYAxis(),
+				8);
+
+			current.getState().calculate(neighbors);
+
+
+		}
+	}
 }
