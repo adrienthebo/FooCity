@@ -14,6 +14,7 @@ package foocity.tile;
 public class Tile {
 
 	protected TileType _type;
+	protected TileState _state = new TileState();
 
 	/**
 	 * <p>
@@ -79,5 +80,12 @@ public class Tile {
 	 */
 	public void setType(TileType type) {
 		_type = type;
+	}
+
+	/**
+	 * @return The TileState object for this type.
+	 */
+	public TileState getState() {
+		return _state;
 	}
 }
