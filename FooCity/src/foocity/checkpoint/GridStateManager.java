@@ -1,7 +1,9 @@
-package foocity.grid;
+package foocity.checkpoint;
 
 import java.io.*;
 import java.util.*;
+
+import foocity.grid.Grid;
 
 /**
  * <p>

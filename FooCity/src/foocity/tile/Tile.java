@@ -63,7 +63,7 @@ public class Tile {
 			_type = newType;
 		}
 		else {
-			throw new IllegalArgumentException(c + " is not a valid tile chacter representation");
+			throw new IllegalArgumentException(c + " is not a valid tile character representation");
 		}
 	}
 

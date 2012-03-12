@@ -63,6 +63,17 @@ public class GameCalendar implements PropertyChangeGenerator {
 		EventGenerator.firePropertyChangeEvent(this, _listeners, "Calendar", oldCalendar, newCalendar);
 	}
 
+	/**
+	 * <p>
+	 * Returns a duplicate of the current calendar.
+	 * </p>
+	 *
+	 * @param newCalendar The calendar representing the new date.
+	 */
+	public Calendar getCalendar() {
+		return (Calendar)_calendar.clone();
+	}
+
 	@Override
 	public String toString() {
 		int month = _calendar.get(Calendar.MONTH);

@@ -32,7 +32,7 @@ import foocity.state.GameState;
 import foocity.state.TaxRates;
 
 import foocity.grid.Grid;
-import foocity.grid.GridStateManager;
+import foocity.checkpoint.GridStateManager;
 
 import foocity.tile.TileCollection;
 

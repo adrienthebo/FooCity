@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
+import foocity.checkpoint.GridStateManager;
 import foocity.grid.Grid;
 import foocity.grid.GridEvent;
 import foocity.grid.GridListener;

@@ -215,7 +215,7 @@ public class Grid {
 	 *
 	 * @param tiles A 2D array of characters representing tiles
 	 */
-	protected void gridFromChars(char[][] tiles) {
+	public void gridFromChars(char[][] tiles) {
 		// Populate the grid by instantiating a tile at each location
 		for(int yIter = 0; yIter < _ySize; yIter++) {
 			for(int xIter = 0; xIter < _xSize; xIter++) {
