@@ -65,7 +65,9 @@ public class GameCalendar implements PropertyChangeGenerator {
 
 	@Override
 	public String toString() {
-		return _calendar.toString();
+		int month = _calendar.get(Calendar.MONTH);
+		int year = _calendar.get(Calendar.YEAR);
+		return month + "/" + year;
 	}
 
 	@Override

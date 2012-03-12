@@ -2,6 +2,9 @@ package foocity.guiclient;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import java.io.File;
 import java.lang.Exception;
 
@@ -40,7 +43,7 @@ import foocity.tile.TileCollection;
  * The actual Map and Mini Map data lives in a Map object. 
  * </p>
  */
-public class MainMap
+public class MainMap implements PropertyChangeListener
 {
 	// Initial Money
 	private final int STARTING_MONEY = 0;
@@ -69,8 +72,15 @@ public class MainMap
 	private Map mapControl;
 	// Tax Control
 	private TaxControl taxControl;
-	// The status bar at the bottom of the screen
-	private JLabel statusBar;
+	// Reports
+	private ReportView reportView;
+	
+	// The date field at the bottom left of the screen
+	private JLabel dateLabel;
+	// The money field at the bottom center of the screen
+	private JLabel moneyLabel;
+	// The status field at the bottom right of the screen
+	private JLabel statusLabel;
 	
 	// The New File... Chooser
 	private JFileChooser newFileChooser; 
@@ -80,11 +90,11 @@ public class MainMap
 	private JFileChooser saveFileChooser;
 	
 	// Report view window
-	private JDialog reportView;
+	private JDialog reportWindow;
 	// Mini map window
-	private JDialog miniMapView;
+	private JDialog miniMapWindow;
 	// Tax rate window
-	private JDialog taxView;
+	private JDialog taxWindow;
 	
 	/**
 	 * <p>
@@ -128,7 +138,20 @@ public class MainMap
 		createFileDialogs();
 		createDialogs();
 		
-		updateStatus("Welcome to FooCity!");
+		updateDateLabel();
+		updateMoneyLabel();
+		updateLabel(statusLabel, "Welcome to FooCity!");
+	}
+	
+	/**
+	 * <p>
+	 * Implement PropertyChange handling
+	 * </p> 
+	 */
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		updateDateLabel();
+		updateMoneyLabel();
 	}
 	
 	// Create initial Application frame.
@@ -150,6 +173,9 @@ public class MainMap
 	 * representation, grid is passed back for loading, saving, and
 	 * gameCalendar, taxRates, etc, are passed to gameState and
 	 * given to TaxControl and ReportView objects (which populate dialogs).
+	 * 
+	 * Because this is where models are initialized, this is also were
+	 * we subscribe to them.
 	 */
 	private void initializeModels()
 	{
@@ -161,6 +187,10 @@ public class MainMap
 		taxRates = taxControl.getTaxRates();
 				
 		gameState = new GameState(grid, taxRates, gameCalendar, STARTING_MONEY);
+		
+		reportView = new ReportView(gameState);
+		
+		gameCalendar.addPropertyChangeListener(this);
 	}
 	
 	// Creates menubar, and populates the individual menus.
@@ -257,10 +287,17 @@ public class MainMap
 				}
 			}
 		});
+
+		// Step time forward
+		menuChangeStepTimeForward.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				gameCalendar.increment();
+			}
+		});
 		
 		menuChangeTaxRates.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showView(taxView, menuChangeTaxRates.getState());
+				showView(taxWindow, menuChangeTaxRates.getState());
 			}
 		});
 		
@@ -281,13 +318,13 @@ public class MainMap
 
 		menuViewReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showView(reportView, menuViewReports.getState());
+				showView(reportWindow, menuViewReports.getState());
 			}
 		});
 		
 		menuViewMiniMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showView(miniMapView, menuViewMiniMap.getState());
+				showView(miniMapWindow, menuViewMiniMap.getState());
 			}
 		});
 		
@@ -322,34 +359,40 @@ public class MainMap
 	private void createDialogs()
 	{
 		// Mini Map
-		miniMapView = new JDialog(frmFoocity, false);
-		miniMapView.setTitle("Mini Map");
-		miniMapView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		miniMapWindow = new JDialog(frmFoocity, false);
+		miniMapWindow.setTitle("Mini Map");
+		miniMapWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 		JScrollPane mapPane = new JScrollPane();
-		miniMapView.getContentPane().add(mapPane, BorderLayout.CENTER);
+		miniMapWindow.getContentPane().add(mapPane, BorderLayout.CENTER);
 		
 		JPanel miniMapPanel = mapControl.miniMap();
 		mapPane.setViewportView(miniMapPanel);
-		miniMapView.pack();
+		miniMapWindow.pack();
 
 		// Reports
-		reportView = new JDialog(frmFoocity, false);
-		reportView.setTitle("Reports");
-		reportView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		reportView.pack();
+		reportWindow = new JDialog(frmFoocity, false);
+		reportWindow.setTitle("Reports");
+		reportWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);		
+
+		JScrollPane reportPane = new JScrollPane();
+		reportWindow.getContentPane().add(reportPane, BorderLayout.CENTER);
+		
+		JPanel reportPanel = reportView.getReportPanel();
+		reportPane.setViewportView(reportPanel);
+		reportWindow.pack();
 		
 		// Tax Rates
-		taxView = new JDialog(frmFoocity, false);
-		taxView.setTitle("Tax Rates");
-		taxView.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);		
+		taxWindow = new JDialog(frmFoocity, false);
+		taxWindow.setTitle("Tax Rates");
+		taxWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);		
 
 		JScrollPane taxPane = new JScrollPane();
-		taxView.getContentPane().add(taxPane, BorderLayout.CENTER);
+		taxWindow.getContentPane().add(taxPane, BorderLayout.CENTER);
 		
 		JPanel taxPanel = taxControl.getTaxPanel();
 		taxPane.setViewportView(taxPanel);
-		taxView.pack();
+		taxWindow.pack();
 	}
 	
 	// The status bar is for notifying the user of non-critical events.
@@ -357,10 +400,15 @@ public class MainMap
 	{
 		JPanel statusPanel = new JPanel();
 		frmFoocity.getContentPane().add(statusPanel, BorderLayout.SOUTH);
-		statusPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		statusPanel.setLayout(new GridLayout(0, 3, 0, 0));
 		
-		statusBar = new JLabel();
-		statusPanel.add(statusBar);
+		dateLabel = new JLabel();
+		moneyLabel = new JLabel();
+		statusLabel = new JLabel();
+		
+		statusPanel.add(dateLabel);
+		statusPanel.add(moneyLabel);
+		statusPanel.add(statusLabel);
 	}
 	
 	// This creates each tool button for the toolbar.
@@ -395,11 +443,11 @@ public class MainMap
 			if (tool.getName() == tileType) { // This is the button just pressed
 				if (tool.isSelected() == true) { // Button selected?
 					mapControl.setDesiredTile(tileType);
-					updateStatus("Tile placement mode, type: " + tileType);
+					updateLabel(statusLabel, "Tile placement mode, type: " + tileType);
 				}
 				else { // Button was just unselected
 					mapControl.setDesiredTile(null);
-					updateStatus("Exiting tile placement mode");
+					updateLabel(statusLabel, "Exiting tile placement mode");
 				}
 			}
 			else { // Unset all other buttons
@@ -416,9 +464,9 @@ public class MainMap
 	}
 	
 	// This updates the text in the status bar.
-	private void updateStatus(String newStatus)
+	private void updateLabel(JLabel label, String message)
 	{
-		statusBar.setText(newStatus);
+		label.setText(message);
 	}
 	
 	// This creates a new alert message dialog for critical events.
@@ -431,14 +479,29 @@ public class MainMap
 	private void loadFile(File fileToLoad)
 	{
 		GridStateManager manager = new GridStateManager(grid);
-		if (manager.load(fileToLoad.getAbsolutePath()))
+		String filePath = fileToLoad.getAbsolutePath();
+		
+		if (manager.load(filePath)) {
 			mapControl.updateMap();
+			updateLabel(statusLabel, "Loaded file: " + filePath);
+		}
 	}
 	
 	// Saves current game state to a file.
 	private void saveFile(File fileToSave)
 	{
 		GridStateManager manager = new GridStateManager(grid);
-		manager.save(fileToSave.getAbsolutePath());		
+		String filePath = fileToSave.getAbsolutePath();
+		
+		if (manager.save(filePath))
+			updateLabel(statusLabel, "Saved to file: " + filePath);
+	}
+	
+	private void updateDateLabel() {
+		updateLabel(dateLabel, "Date: " + gameCalendar.toString());
+	}
+	
+	private void updateMoneyLabel() {
+		updateLabel(moneyLabel, "Current Funds: $" + gameState.getFunds());
 	}
 }

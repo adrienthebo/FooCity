@@ -13,11 +13,9 @@ import javax.swing.ImageIcon;
 import foocity.grid.Grid;
 import foocity.grid.GridEvent;
 import foocity.grid.GridListener;
-import foocity.grid.GridStateManager;
 
 import foocity.tile.TileCollection;
 
-import java.io.File;
 import java.util.Hashtable;
 
 
