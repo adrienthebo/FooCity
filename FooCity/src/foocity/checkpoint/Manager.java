@@ -1,50 +1,123 @@
 package foocity.checkpoint;
 
 import java.io.*;
-
-import java.util.GregorianCalendar;
+import java.util.*;
 
 import foocity.state.*;
 import foocity.grid.Grid;
+/**
+ * <p>
+ * This class provides a general purpose adapter for loading and saving games.
+ * </p>
+ *
+ * <p>
+ * Loading and saving an actual grid is delegated to the GridStateManager
+ * class, since that's fairly involved.
+ * </p>
+ */
 public class Manager {
 
-	public static void loadCheckPoint(GameState state, String filename) throws NumberFormatException, IOException {
+	protected GameState _state;
 
-		Reader f = new FileReader(filename);
-		BufferedReader stream = new BufferedReader(f);
-		while(stream.ready()) {
-			String line = stream.readLine();
+	/**
+	 * <p>
+	 * Generate a new Manager based on an existing state.
+	 * </p>
+	 *
+	 * @param newState The existing state object
+	 */
+	public Manager(GameState newState) {
+		_state = newState;
+	}
 
-			String[] tokens = line.split(" ");
-			if(tokens[0].equals("grid")) {
-				int xSize = Integer.parseInt(tokens[1]);
-				int ySize = Integer.parseInt(tokens[2]);
-				String mapFileName = tokens[3];
-
-				Grid thisGrid = new Grid(xSize, ySize);
-				GridStateManager gUnit = new GridStateManager(thisGrid);
-				gUnit.load(mapFileName);
-			}
-			else if(tokens[0].equals("gamecalendar")) {
-				int year = Integer.parseInt(tokens[1]);
-				int month = Integer.parseInt(tokens[2]);
-				int dayOfMonth = Integer.parseInt(tokens[3]);
-
-				state.getCalendar().set(new GregorianCalendar(year, month, dayOfMonth));
-			}
-			else if(tokens[0].equals("funds")) {
-				int funds = Integer.parseInt(tokens[1]);
-			}
-			else if(tokens[0].equals("taxes")) {
-				int propertyTax = Integer.parseInt(tokens[1]);
-				int salesTax = Integer.parseInt(tokens[2]);
-				int businessTax = Integer.parseInt(tokens[3]);
-				int incomeTax = Integer.parseInt(tokens[4]);
-
-				state.getTaxRates().setAll(propertyTax, salesTax, businessTax, incomeTax);
+	public void load(String checkpointFile) {
+		try {
+			Reader f = new FileReader(checkpointFile);
+			String[][] lines = parseStream(f);
+			for(String[] tokens : lines) {
+				if(tokens[0].equals("grid")) loadGrid(tokens);
+				else if(tokens[0].equals("gamecalendar")) loadGrid(tokens);
+				else if(tokens[0].equals("funds")) loadFunds(tokens);
 			}
 		}
+		catch(FileNotFoundException e) {
+			System.err.println("Unable to load checkpoint file " + checkpointFile + ": " + e);
+			e.printStackTrace();
+		}
+		catch(IOException e) {
+			System.err.println("Error while loading " + checkpointFile + ": " + e);
+			e.printStackTrace();
+		}
 	}
+
+	private void loadGrid(String[] tokens) {
+		//int xSize = Integer.parseInt(tokens[1]);
+		//int ySize = Integer.parseInt(tokens[2]);
+		String mapFileName = tokens[3];
+
+		GridStateManager gUnit = new GridStateManager(_state.getGrid());
+		gUnit.load(mapFileName);
+	}
+
+	private void loadGameCalendar(String[] tokens) {
+		int year = Integer.parseInt(tokens[1]);
+		int month = Integer.parseInt(tokens[2]);
+		int dayOfMonth = Integer.parseInt(tokens[3]);
+
+		_state.getCalendar().set(new GregorianCalendar(year, month, dayOfMonth));
+	}
+
+	private void loadFunds(String[] tokens) {
+		int funds = Integer.parseInt(tokens[1]);
+	}
+
+	private void loadTaxes(String[] tokens) {
+		int propertyTax = Integer.parseInt(tokens[1]);
+		int salesTax = Integer.parseInt(tokens[2]);
+		int businessTax = Integer.parseInt(tokens[3]);
+		int incomeTax = Integer.parseInt(tokens[4]);
+
+		_state.getTaxRates().setAll(propertyTax, salesTax, businessTax, incomeTax);
+	}
+
+	/**
+	 * <p>
+	 * Read in a savegame from a stream and split it into tokens.
+	 * </p>
+	 *
+	 * <pre>
+	 * myManager.parseStream(new StringReader("one two\nthree four")); //returns {{"one", "two"}, {"three", "four}}
+	 * </pre>
+	 *
+	 * @param r The reader to parse
+	 * @throws IOException lol error handling
+	 */
+	public String[][] parseStream(Reader r) throws IOException {
+		BufferedReader stream = new BufferedReader(r);
+
+		List<String[]> currentRows = new LinkedList<String[]>();
+		while(stream.ready()) {
+			//Extract content from the stream until it returns null, IE is empty
+
+			String line = stream.readLine();
+			if(line != null) {
+				String[] tokens = line.split(" ");
+				currentRows.add(tokens);
+			}
+			else {
+				break;
+			}
+		}
+
+		/* Convert linked list of char arrays to a 2D char array.
+		 * Java is not my favorite language.
+		 */
+		String[][] rows = new String[currentRows.size()][];
+		for(int i = 0; i < currentRows.size(); i++) rows[i] = currentRows.get(i);
+
+		return rows;
+	}
+
 }
 
 
