@@ -288,7 +288,7 @@ public class Grid {
 			Tile[] neighbors = NeighborSelector.get(this, 
 				iter.currentXAxis(),
 				iter.currentYAxis(),
-				8);
+				4);
 
 			current.getState().calculate(neighbors);
 
