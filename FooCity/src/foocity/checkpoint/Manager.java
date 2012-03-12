@@ -30,6 +30,13 @@ public class Manager {
 		_state = newState;
 	}
 
+	/**
+	 * <p>
+	 * Load a checkpoint file into the given GameState
+	 * </p>
+	 *
+	 * @param checkpointFile The file to read game state from
+	 */
 	public void load(String checkpointFile) {
 		try {
 			Reader f = new FileReader(checkpointFile);
@@ -45,16 +52,43 @@ public class Manager {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Parse checkpoint data from a stream and populate the GameState
+	 * </p>
+	 *
+	 * <p>
+	 * This is directly exposed for testing purposes, and you probably don't
+	 * need to use it.
+	 * </p>
+	 *
+	 * @param r The reader to read from
+	 */
 	public void populate(Reader r) throws IOException {
-			String[][] lines = parseStream(r);
-			for(String[] tokens : lines) {
-				if(tokens[0].equals("grid")) loadGrid(tokens);
-				else if(tokens[0].equals("gamecalendar")) loadGameCalendar(tokens);
-				else if(tokens[0].equals("funds")) loadFunds(tokens);
-				else if(tokens[0].equals("taxes")) loadTaxes(tokens);
-			}
+		String[][] lines = parseStream(r);
+		for(String[] tokens : lines) {
+			if(tokens[0].equals("grid")) loadGrid(tokens);
+			else if(tokens[0].equals("gamecalendar")) loadGameCalendar(tokens);
+			else if(tokens[0].equals("funds")) loadFunds(tokens);
+			else if(tokens[0].equals("taxes")) loadTaxes(tokens);
+		}
 	}
 
+	/**
+	 * <p>
+	 * Translate a grid config line into grid state
+	 * </p>
+	 *
+	 * <p>
+	 * This method expects xSize and ySize but doesn't currently use them.
+	 * We can't resize the grid after it's been generated, so this may
+	 * be useful for later but isn't used right now.
+	 * </p>
+	 *
+	 * <p>
+	 * Expected input: grid xSize ySize path/to/gridfile
+	 * </p>
+	 */
 	private void loadGrid(String[] tokens) {
 		//int xSize = Integer.parseInt(tokens[1]);
 		//int ySize = Integer.parseInt(tokens[2]);
@@ -64,6 +98,15 @@ public class Manager {
 		gUnit.load(mapFileName);
 	}
 
+	/**
+	 * <p>
+	 * Translate a grid config line into a date
+	 * </p>
+	 *
+	 * <p>
+	 * Expected input: gamecalendar year month dayofmonth
+	 * </p>
+	 */
 	private void loadGameCalendar(String[] tokens) {
 		int year = Integer.parseInt(tokens[1]);
 		int month = Integer.parseInt(tokens[2]);
@@ -72,10 +115,28 @@ public class Manager {
 		_state.getCalendar().set(new GregorianCalendar(year, month, dayOfMonth));
 	}
 
+	/**
+	 * <p>
+	 * Translate a grid config line into current funds
+	 * </p>
+	 *
+	 * <p>
+	 * Expected input: funds 0000
+	 * </p>
+	 */
 	private void loadFunds(String[] tokens) {
 		int funds = Integer.parseInt(tokens[1]);
 	}
 
+	/**
+	 * <p>
+	 * Translate a grid config line into current funds
+	 * </p>
+	 *
+	 * <p>
+	 * Expected input: funds 0000
+	 * </p>
+	 */
 	private void loadTaxes(String[] tokens) {
 		int propertyTax = Integer.parseInt(tokens[1]);
 		int salesTax = Integer.parseInt(tokens[2]);
@@ -87,7 +148,7 @@ public class Manager {
 
 	/**
 	 * <p>
-	 * Read in a savegame from a stream and split it into tokens.
+	 * Read in a checkpoint from a stream and split it into tokens.
 	 * </p>
 	 *
 	 * <pre>
@@ -124,5 +185,3 @@ public class Manager {
 	}
 
 }
-
-
