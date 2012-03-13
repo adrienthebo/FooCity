@@ -140,7 +140,8 @@ public class MainMap implements PropertyChangeListener
 		
 		updateDateLabel();
 		updateMoneyLabel();
-		updateLabel(statusLabel, "Welcome to FooCity!");
+		
+		finalizeView();
 	}
 	
 	/**
@@ -513,11 +514,20 @@ public class MainMap implements PropertyChangeListener
 			updateLabel(statusLabel, "Saved to file: " + filePath);
 	}
 	
+	// Refresh date from gameCalendar model
 	private void updateDateLabel() {
 		updateLabel(dateLabel, "Date: " + gameCalendar.toString());
 	}
 	
+	// Refresh money from gameState model
 	private void updateMoneyLabel() {
 		updateLabel(moneyLabel, "Current Funds: $" + gameState.getFunds());
+	}
+	
+	// Refresh main window size and welcome the user
+	private void finalizeView()
+	{
+		frmFoocity.pack();
+		updateLabel(statusLabel, "Welcome to FooCity!");
 	}
 }
