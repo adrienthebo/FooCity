@@ -16,10 +16,15 @@ import javax.swing.JToggleButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import javax.swing.JLabel;
@@ -46,7 +51,7 @@ import foocity.tile.TileCollection;
 public class MainMap implements PropertyChangeListener
 {
 	// Initial Money
-	private final int STARTING_MONEY = 0;
+	private final int STARTING_MONEY = 1000;
 	
 	// Size Constants--map grid size
 	private final int WIDTH = 128;
@@ -96,6 +101,11 @@ public class MainMap implements PropertyChangeListener
 	// Tax rate window
 	private JDialog taxWindow;
 	
+	// Continuous Mode == True, Step-by-Step Mode == False
+	private boolean continuousMode = false;
+	// Game speed in milliseconds--default to 1 month == 5 seconds
+	private final int GAME_INTERVAL = 5000;
+	
 	/**
 	 * <p>
 	 * Entry point for the application. From here we create visual elements and instantiate the model objects.
@@ -142,8 +152,9 @@ public class MainMap implements PropertyChangeListener
 		updateMoneyLabel();
 		
 		finalizeView();
+		startCalendar();
 	}
-	
+
 	/**
 	 * <p>
 	 * Implement PropertyChange handling
@@ -291,9 +302,11 @@ public class MainMap implements PropertyChangeListener
 		menuChangeContinuousTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (menuChangeContinuousTime.getState() == true) {
+					setContinuousMode(true);
 					menuChangeStepTimeForward.setEnabled(false);
 				}
 				else {
+					setContinuousMode(false);
 					menuChangeStepTimeForward.setEnabled(true);
 				}
 			}
@@ -529,5 +542,35 @@ public class MainMap implements PropertyChangeListener
 	{
 		frmFoocity.pack();
 		updateLabel(statusLabel, "Welcome to FooCity!");
+	}
+
+	// Are we in continuous mode?
+	public boolean isContinuousMode() {
+		return continuousMode;
+	}
+
+	// Set the continuous mode.
+	public void setContinuousMode(boolean continuousMode) {
+		this.continuousMode = continuousMode;
+	}
+		
+	/**
+	 *  Register an action to advance the calendar if continuousMode is
+	 *  set, otherwise no-op.
+	 *  
+	 *  Fire off a Timer to send this action on it's merry way.
+	 */
+	private void startCalendar() {
+		Action calendarAdvanceAction = new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+		    	if (isContinuousMode()) {
+		    		gameCalendar.increment();
+		    	}
+		    }
+		};
+
+		new Timer(GAME_INTERVAL, calendarAdvanceAction).start();		
 	}
 }
