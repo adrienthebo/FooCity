@@ -13,6 +13,7 @@ public class Immigration extends Rule {
 	public void apply(GameState g) {
 		int happiness = _ruleSet.getReport().get(TileAttribute.HAPPINESS);
 
-		int immigrants = (int)Math.log((double)happiness);
+		int immigrants = (int)Math.log((double)happiness) * 2;
+		g.getPopulation().add(immigrants);
 	}
 }

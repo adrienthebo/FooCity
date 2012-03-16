@@ -14,6 +14,7 @@ public class Pollution extends Rule {
 		int pollution = _ruleSet.getReport().get(TileAttribute.POLLUTION);
 
 		int dead = (int)Math.log((double)pollution);
+		g.getPopulation().remove(dead);
 	}
 }
 

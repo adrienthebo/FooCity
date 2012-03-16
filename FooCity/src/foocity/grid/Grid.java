@@ -306,7 +306,9 @@ public class Grid {
 			TileState state = current.getState();
 
 			for(TileAttribute attr : TileAttribute.values()) {
-				Integer value = (Integer)report.get(attr);
+				Object out = report.get(attr);
+				int value = 0;
+				if(out != null) value = (Integer)out;
 				value += state.getAttribute(attr);
 				report.put(attr, value);
 			}

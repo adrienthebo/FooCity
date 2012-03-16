@@ -14,6 +14,7 @@ public class Crime extends Rule {
 		int crime = _ruleSet.getReport().get(TileAttribute.CRIME);
 
 		int dead = (int)Math.log((double)crime);
+		g.getPopulation().remove(dead);
 	}
 }
 

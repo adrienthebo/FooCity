@@ -1,10 +1,7 @@
 package foocity.state;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.*;
 import foocity.grid.Grid;
-import foocity.population.Person;
+import foocity.population.*;
 import foocity.rules.*;
 
 /**
@@ -28,7 +25,7 @@ public class GameState {
 	protected Grid _grid;
 	protected TaxRates _taxes;
 	protected GameCalendar _calendar;
-	protected List<Person> _citizens = new ArrayList<Person>();
+	protected Population _population;
 
 	protected int _funds;
 	/*
@@ -43,6 +40,7 @@ public class GameState {
 		_taxes = newTaxRates;
 		_calendar = newGameCalendar;
 		_funds = newFunds;
+		_population = new Population(_grid);
 
 		RuleSet.registerState(this);
 	}
@@ -59,7 +57,15 @@ public class GameState {
 		return _calendar;
 	}
 
+	public Population getPopulation() {
+		return _population;
+	}
+
 	public int getFunds() {
 		return _funds;
+	}
+
+	public void setFunds(int newFunds) {
+		_funds = newFunds;
 	}
 }
