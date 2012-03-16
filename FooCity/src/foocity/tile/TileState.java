@@ -1,6 +1,8 @@
 package foocity.tile;
 
 import java.util.*;
+
+import foocity.population.Person;
 import foocity.state.*;
 
 
@@ -15,8 +17,8 @@ public class TileState {
 	private Tile _tile;
 	protected Map<TileAttribute, Integer> _attributes = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
 
-	protected List<OrganSack> _workers = new ArrayList<OrganSack>();
-	protected List<OrganSack> _residents = new ArrayList<OrganSack>();
+	protected List<Person> _workers = new ArrayList<Person>();
+	protected List<Person> _residents = new ArrayList<Person>();
 
 	public TileState(Tile tile) {
 		_tile = tile;
@@ -84,22 +86,22 @@ public class TileState {
 		_attributes.clear();
 	}
 
-	public void addResident(OrganSack o) {
+	public void addResident(Person o) {
 		if(_residents.size() < getAttribute(TileAttribute.HOUSING))
 			_residents.add(o);
 	}
 
-	public void addWorker(OrganSack o) {
+	public void addWorker(Person o) {
 		if(_workers.size() < getAttribute(TileAttribute.JOBS))
 			_workers.add(o);
 	}
 
-	public void removeResident(OrganSack o) {
+	public void removeResident(Person o) {
 		if(_residents.contains(o))
 			_residents.remove(o);
 	}
 
-	public void removeWorker(OrganSack o) {
+	public void removeWorker(Person o) {
 		if(_workers.contains(o))
 			_workers.remove(o);
 	}

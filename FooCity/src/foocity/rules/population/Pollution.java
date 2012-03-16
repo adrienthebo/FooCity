@@ -1,4 +1,6 @@
-package foocity.rules;
+package foocity.rules.population;
+import foocity.rules.Rule;
+import foocity.rules.RuleSet;
 import foocity.state.*;
 import foocity.tile.TileAttribute;
 import java.lang.Math;
@@ -9,7 +11,7 @@ public class Pollution extends Rule {
 	}
 
 	public void apply(GameState g) {
-		int pollution = _ruleSet._report.get(TileAttribute.POLLUTION);
+		int pollution = _ruleSet.getReport().get(TileAttribute.POLLUTION);
 
 		int dead = (int)Math.log((double)pollution);
 	}

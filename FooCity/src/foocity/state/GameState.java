@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 import foocity.grid.Grid;
+import foocity.population.Person;
 import foocity.rules.*;
 
 /**
@@ -27,7 +28,7 @@ public class GameState {
 	protected Grid _grid;
 	protected TaxRates _taxes;
 	protected GameCalendar _calendar;
-	protected List<OrganSack> _citizens = new ArrayList<OrganSack>();
+	protected List<Person> _citizens = new ArrayList<Person>();
 
 	protected int _funds;
 	/*

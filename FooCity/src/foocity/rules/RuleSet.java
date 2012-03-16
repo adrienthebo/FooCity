@@ -39,4 +39,8 @@ public class RuleSet implements PropertyChangeListener {
 			rule.apply(_state);
 		}
 	}
+	
+	public Map<TileAttribute, Integer> getReport() {
+		return _report;
+	}
 }
