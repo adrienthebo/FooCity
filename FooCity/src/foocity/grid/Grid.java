@@ -2,7 +2,7 @@ package foocity.grid;
 
 import javax.swing.event.EventListenerList;
 
-import java.util.Iterator;
+import java.util.*;
 
 import foocity.tile.*;
 
@@ -291,8 +291,27 @@ public class Grid {
 				4);
 
 			current.getState().calculate(neighbors);
-
-
 		}
+	}
+
+	public Map<TileAttribute, Integer> totalAttributes() {
+		Map<TileAttribute, Integer> report = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
+
+		calculate();
+
+		GridMemberIterator iter = new GridMemberIterator(this);
+
+		while(iter.hasNext()) {
+			Tile current = iter.next();
+			TileState state = current.getState();
+
+			for(TileAttribute attr : TileAttribute.values()) {
+				Integer value = (Integer)report.get(attr);
+				value += state.getAttribute(attr);
+				report.put(attr, value);
+			}
+		}
+
+		return report;
 	}
 }

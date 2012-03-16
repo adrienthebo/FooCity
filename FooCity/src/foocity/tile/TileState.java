@@ -73,7 +73,6 @@ public class TileState {
 			value += type.getAttribute(attr);
 			_attributes.put(attr, value);
 		}
-
 	}
 
 	/**
