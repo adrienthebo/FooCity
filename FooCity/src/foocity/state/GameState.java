@@ -1,8 +1,10 @@
 package foocity.state;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 import foocity.grid.Grid;
+import foocity.rules.*;
 
 /**
  * <p>
@@ -21,7 +23,7 @@ import foocity.grid.Grid;
  * notified of a full state change.
  * </p>
  */
-public class GameState implements PropertyChangeListener {
+public class GameState {
 	protected Grid _grid;
 	protected TaxRates _taxes;
 	protected GameCalendar _calendar;
@@ -41,7 +43,7 @@ public class GameState implements PropertyChangeListener {
 		_calendar = newGameCalendar;
 		_funds = newFunds;
 
-		_calendar.addPropertyChangeListener(this);
+		RuleSet.registerState(this);
 	}
 
 	public Grid getGrid() {

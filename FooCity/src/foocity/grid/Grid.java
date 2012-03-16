@@ -294,7 +294,7 @@ public class Grid {
 		}
 	}
 
-	public Map<TileAttribute, Integer> totalAttributes() {
+	public Map<TileAttribute, Integer> report() {
 		Map<TileAttribute, Integer> report = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
 
 		calculate();
