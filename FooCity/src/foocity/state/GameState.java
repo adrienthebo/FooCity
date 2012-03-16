@@ -1,5 +1,6 @@
 package foocity.state;
 
+import java.util.*;
 import foocity.grid.Grid;
 
 /**
@@ -23,6 +24,7 @@ public class GameState {
 	protected Grid _grid;
 	protected TaxRates _taxes;
 	protected GameCalendar _calendar;
+	protected List<OrganSack> _citizens = new ArrayList<OrganSack>();
 
 	protected int _funds;
 	/*

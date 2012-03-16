@@ -1,7 +1,7 @@
 package foocity.tile;
 
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
+import foocity.state.*;
 
 
 /**
@@ -12,7 +12,15 @@ import java.util.Map;
  */
 public class TileState {
 
+	private Tile _tile;
 	protected Map<TileAttribute, Integer> _attributes = new EnumMap<TileAttribute, Integer>(TileAttribute.class);
+
+	protected List<OrganSack> _workers = new ArrayList<OrganSack>();
+	protected List<OrganSack> _residents = new ArrayList<OrganSack>();
+
+	public TileState(Tile tile) {
+		_tile = tile;
+	}
 
 	/**
 	 * <p>
@@ -41,6 +49,13 @@ public class TileState {
 		return val;
 	}
 
+	/**
+	 * <p>
+	 * Calculate the tilestate for this object
+	 * </p>
+	 *
+	 * @param neighbors An array of neighboring tiles
+	 */
 	public void calculate(Tile[] neighbors) {
 		for(Tile currentTile : neighbors) {
 			add(currentTile.getType());
@@ -69,4 +84,25 @@ public class TileState {
 	public void clear() {
 		_attributes.clear();
 	}
+
+	public void addResident(OrganSack o) {
+		if(_residents.size() < getAttribute(TileAttribute.HOUSING))
+			_residents.add(o);
+	}
+
+	public void addWorker(OrganSack o) {
+		if(_workers.size() < getAttribute(TileAttribute.JOBS))
+			_workers.add(o);
+	}
+
+	public void removeResident(OrganSack o) {
+		if(_residents.contains(o))
+			_residents.remove(o);
+	}
+
+	public void removeWorker(OrganSack o) {
+		if(_workers.contains(o))
+			_workers.remove(o);
+	}
+
 }

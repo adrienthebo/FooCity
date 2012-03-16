@@ -14,7 +14,7 @@ package foocity.tile;
 public class Tile {
 
 	protected TileType _type;
-	protected TileState _state = new TileState();
+	protected TileState _state = new TileState(this);
 
 	/**
 	 * <p>
