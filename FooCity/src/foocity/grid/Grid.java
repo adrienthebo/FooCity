@@ -314,4 +314,21 @@ public class Grid {
 
 		return report;
 	}
+
+	public Tile[] getTileTypes(String type) {
+		List<Tile> list = new LinkedList<Tile>();
+
+		GridMemberIterator iter = new GridMemberIterator(this);
+		while(iter.hasNext()) {
+			Tile current = iter.next();
+
+			if(current.getType().getName().equals(type))
+				list.add(current);
+		}
+
+		Tile[] arr = new Tile[list.size()];
+		for(int i = 0; i < list.size(); arr[i] = list.get(i), i++);
+
+		return arr;
+	}
 }

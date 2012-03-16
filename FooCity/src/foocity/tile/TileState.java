@@ -86,14 +86,26 @@ public class TileState {
 		_attributes.clear();
 	}
 
-	public void addResident(Person o) {
-		if(_residents.size() < getAttribute(TileAttribute.HOUSING))
+	public boolean addResident(Person o) {
+		if(_residents.size() < getAttribute(TileAttribute.HOUSING)) {
 			_residents.add(o);
+			o.setHome(_tile);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
-	public void addWorker(Person o) {
-		if(_workers.size() < getAttribute(TileAttribute.JOBS))
+	public boolean addWorker(Person o) {
+		if(_workers.size() < getAttribute(TileAttribute.JOBS)) {
+			o.setWork(_tile);
 			_workers.add(o);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public void removeResident(Person o) {
